@@ -1,0 +1,29 @@
+C51 COMPILER V9.60.0.0   HEADER6                                                           07/21/2020 15:54:41 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE HEADER6
+OBJECT MODULE PLACED IN .\Objects\header6.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE header6.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\h
+                    -eader6.lst) TABS(2) OBJECT(.\Objects\header6.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "../../headers/paulobetaX6.c"
+*** ERROR C141 IN LINE 391 OF ../../headers/paulobetaX6.c: syntax error near '0000', expected 'hdata'
+*** ERROR C281 IN LINE 391 OF ../../headers/paulobetaX6.c: illegal hex constant
+*** ERROR C281 IN LINE 392 OF ../../headers/paulobetaX6.c: illegal hex constant
+*** ERROR C281 IN LINE 393 OF ../../headers/paulobetaX6.c: illegal hex constant
+*** ERROR C281 IN LINE 394 OF ../../headers/paulobetaX6.c: illegal hex constant
+*** ERROR C281 IN LINE 395 OF ../../headers/paulobetaX6.c: illegal hex constant
+*** ERROR C141 IN LINE 404 OF ../../headers/paulobetaX6.c: syntax error near '}', expected 'hdata'
+   3          
+   4          // GND TO VCC
+   5          // MOTOR TO VCC+ AND DC-
+   6          void main(){
+   7   1        while(1){
+   8   2        
+   9   2        }
+  10   1      }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  7 ERROR(S)

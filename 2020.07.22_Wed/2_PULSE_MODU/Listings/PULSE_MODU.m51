@@ -1,0 +1,198 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    07/22/2020  16:14:02  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\[paulo]pulse_modu.obj TO .\Objects\PULSE_MODU PRINT (.\List
+>> ings\PULSE_MODU.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\[paulo]pulse_modu.obj (_PAULO_PULSE_MODU)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SCDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SIDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\PULSE_MODU (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0002H     UNIT         ?DT?_PAULO_PULSE_MODU
+            IDATA   000AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     00ADH     UNIT         ?C?LIB_CODE
+            CODE    08ADH     00A6H     UNIT         ?PR?MAIN?_PAULO_PULSE_MODU
+            CODE    0953H     008CH     UNIT         ?C_C51STARTUP
+            CODE    09DFH     001DH     UNIT         ?PR?_DELAY?_PAULO_PULSE_MODU
+            CODE    09FCH     0007H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\PULSE_MODU (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?_PAULO_PULSE_MODU
+  +--> ?C_INITSEG
+
+?PR?MAIN?_PAULO_PULSE_MODU
+  +--> ?PR?_DELAY?_PAULO_PULSE_MODU
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\PULSE_MODU (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/22/2020  16:14:02  PAGE 2
+
+
+
+  -------         MODULE        ?C_STARTUP
+  C:0953H         SEGMENT       ?C_C51STARTUP
+  I:000AH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0956H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0953H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0953H         LINE#         133
+  C:0955H         LINE#         134
+  C:0956H         LINE#         135
+  C:0957H         LINE#         136
+  C:0959H         LINE#         185
+  C:095CH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        _PAULO_PULSE_MODU
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:0008H         PUBLIC        period
+  D:00A8H         PUBLIC        IE
+  C:09DFH         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  C:08ADH         PUBLIC        main
+  B:00B0H.4       PUBLIC        motor_switch
+  B:00B0H.7       PUBLIC        speedDown
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:0009H         PUBLIC        dutyCyle
+  B:00B0H.6       PUBLIC        speedUp
+  B:0090H.0       PUBLIC        dc_motor
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:08ADH         LINE#         13
+  C:08ADH         LINE#         14
+  C:08ADH         LINE#         16
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/22/2020  16:14:02  PAGE 3
+
+
+  C:08ADH         LINE#         17
+  C:08ADH         LINE#         18
+  C:08B0H         LINE#         19
+  C:08B2H         LINE#         20
+  C:08C2H         LINE#         21
+  C:08C4H         LINE#         22
+  C:08C7H         LINE#         23
+  C:08E6H         LINE#         25
+  C:08E9H         LINE#         26
+  C:08E9H         LINE#         27
+  C:08EEH         LINE#         28
+  C:08F1H         LINE#         29
+  C:08F1H         LINE#         30
+  C:08F4H         LINE#         32
+  C:08F7H         LINE#         33
+  C:08F7H         LINE#         34
+  C:08F7H         LINE#         37
+  C:08FAH         LINE#         38
+  C:08FAH         LINE#         39
+  C:08FFH         LINE#         40
+  C:0902H         LINE#         41
+  C:0902H         LINE#         42
+  C:0904H         LINE#         43
+  C:0907H         LINE#         45
+  C:0924H         LINE#         47
+  C:0924H         LINE#         48
+  C:0924H         LINE#         51
+  C:0927H         LINE#         52
+  C:0927H         LINE#         53
+  C:092CH         LINE#         54
+  C:0932H         LINE#         55
+  C:0932H         LINE#         57
+  C:0935H         LINE#         59
+  C:094AH         LINE#         60
+  C:094AH         LINE#         61
+  C:0950H         LINE#         62
+  C:0950H         LINE#         65
+  C:0950H         LINE#         66
+  C:0950H         LINE#         69
+  -------         ENDPROC       MAIN
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        x
+  -------         DO            
+  D:0006H         SYMBOL        y
+  -------         ENDDO         
+  C:09DFH         LINE#         73
+  C:09DFH         LINE#         74
+  C:09DFH         LINE#         76
+  C:09E5H         LINE#         77
+  C:09FBH         LINE#         78
+  -------         ENDPROC       _DELAY
+  -------         ENDMOD        _PAULO_PULSE_MODU
+
+  -------         MODULE        ?C?SCDIV
+  C:0800H         PUBLIC        ?C?SCDIV
+  -------         ENDMOD        ?C?SCDIV
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/22/2020  16:14:02  PAGE 4
+
+
+  -------         MODULE        ?C?SIDIV
+  C:0822H         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?UIDIV
+  C:0858H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00D8H BYTE (10%) *
+******************************************************************************
+
+Program Size: data=11.0 xdata=0 code=518
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

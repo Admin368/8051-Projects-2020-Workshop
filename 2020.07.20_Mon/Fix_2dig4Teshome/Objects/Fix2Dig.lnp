@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\key_board_matrix_onsevensegment.obj" 
+TO ".\Objects\Fix2Dig" 
+PRINT(".\Listings\Fix2Dig.m51") RAMSIZE(256) 

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\header6.obj" 
+TO ".\Objects\header6" 
+PRINT(".\Listings\header6.m51") RAMSIZE(256) 

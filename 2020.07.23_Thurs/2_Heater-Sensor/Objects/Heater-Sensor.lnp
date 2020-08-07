@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[paulo]heat_sensor.obj" 
+TO ".\Objects\Heater-Sensor" 
+PRINT(".\Listings\Heater-Sensor.m51") RAMSIZE(256) 

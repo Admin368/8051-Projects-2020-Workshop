@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.0.0   PAULO8X8_V2                                                       07/25/2020 03:05:09 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PAULO8X8_V2
+OBJECT MODULE PLACED IN .\Objects\paulo8x8_v2.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE paulo8x8_v2.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\paulo8x8_v2.lst) TABS(2) OBJECT(.\Objects\paulo8x8_v2.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <string.h>
+   3          #include <math.h>
+   4          #define uchar unsigned char
+   5          
+   6          
+   7          char bin;
+   8          char tempbin;
+   9          char bin_row[8];
+  10          char row,col,ixx;
+  11          pdata char hex[8][4];// the binaries in map as 8 hex values
+  12          pdata char map[8][8]={
+  13          {0,0,0,0,0,1,0,0},
+  14          {0,0,0,0,1,1,1,0},
+  15          {0,0,0,0,0,1,0,0},
+  16          {0,0,0,0,0,1,0,0},
+  17          {0,0,0,0,0,1,0,0},
+  18          {0,0,0,0,0,1,0,0},
+  19          {0,0,1,1,1,1,0,0},
+  20          {0,0,0,0,0,0,0,0},
+  21          };
+  22          
+  23          void get_bin(){
+  24   1        bin = 0;
+  25   1        for(row=0;row<8;row++){
+  26   2          for(col=0;col<8;col++){
+  27   3            tempbin = map[row][col]*pow(2,7-col);
+  28   3            bin = tempbin+bin;
+  29   3          }
+  30   2          bin_row[row] = bin;
+  31   2        } 
+  32   1      }
+  33          void giga(char rr){
+  34   1        if(rr==0){P0=0x00;}
+  35   1        if(rr==1){P0=0x80;}
+  36   1        if(rr==2){P0=0x40;}
+  37   1        if(rr==3){P0=0x20;}
+  38   1        if(rr==4){P0=0x10;}
+  39   1        if(rr==5){P0=0x08;}
+  40   1        if(rr==6){P0=0x04;}
+  41   1        if(rr==7){P0=0x02;}
+  42   1        if(rr==8){P0=0x01;}
+  43   1      }
+  44          
+  45          void display(){//display row by row
+  46   1        for(row=0;row<8;row++){
+  47   2          //P0 = bin_row[row];
+  48   2          //P0 = 0xfe; 
+  49   2          giga(row);
+  50   2          //P0 = 0xff;
+  51   2          P2 = 0xff;
+  52   2          //xdelay(100);
+  53   2        }
+  54   1      }
+C51 COMPILER V9.60.0.0   PAULO8X8_V2                                                       07/25/2020 03:05:09 PAGE 2   
+
+  55          
+  56          
+  57          
+  58          void main(){}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    254    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =     96    ----
+   DATA SIZE        =     13    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

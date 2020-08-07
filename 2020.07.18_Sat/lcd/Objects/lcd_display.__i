@@ -1,0 +1,1 @@
+"lcd_display.c" OPTIMIZE (8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd_display.lst) TABS (2) OBJECT(.\Objects\lcd_display.obj)

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\pingpong68_v3.obj" 
+TO ".\Objects\PingPong68_v3" 
+PRINT(".\Listings\PingPong68_v3.m51") RAMSIZE(256) 

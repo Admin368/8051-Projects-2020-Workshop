@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1595623942 source:e:\_microcontrollerworkshop2020\2020.07.24-project\tests.codeblocks\arraycollector\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<math.h>
+

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\flowing_lights.obj" 
+TO ".\Objects\Flowing_Lights" 
+PRINT(".\Listings\Flowing_Lights.m51") RAMSIZE(256) 

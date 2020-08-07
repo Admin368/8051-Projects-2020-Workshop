@@ -1,0 +1,29 @@
+Build target 'Target 1'
+compiling PingPong68.c...
+paulobetaX5.c(47): error C141: syntax error near 'sbit', expected '__asm'
+paulobetaX5.c(47): error C202: 'xseglock': undefined identifier
+paulobetaX5.c(48): error C141: syntax error near 'sbit', expected '__asm'
+paulobetaX5.c(48): error C202: 'xsegdef': undefined identifier
+paulobetaX5.c(49): error C141: syntax error near 'sbit', expected '__asm'
+paulobetaX5.c(49): error C202: 'xdiglock': undefined identifier
+paulobetaX5.c(50): error C141: syntax error near 'sbit', expected '__asm'
+paulobetaX5.c(50): error C202: 'xdigdef': undefined identifier
+paulobetaX5.c(51): error C141: syntax error near 'sbit', expected '__asm'
+paulobetaX5.c(51): error C202: 'xbuzzer': undefined identifier
+paulobetaX5.c(52): error C141: syntax error near 'unsigned', expected '__asm'
+paulobetaX5.c(52): error C202: 'xsegdelay': undefined identifier
+paulobetaX5.c(53): error C141: syntax error near 'unsigned', expected '__asm'
+paulobetaX5.c(53): error C202: 'xdigdelay': undefined identifier
+paulobetaX5.c(54): error C141: syntax error near 'unsigned', expected '__asm'
+paulobetaX5.c(54): error C202: 'xkey': undefined identifier
+paulobetaX5.c(56): error C141: syntax error near 'int', expected '__asm'
+paulobetaX5.c(56): error C202: 'unsplit': undefined identifier
+paulobetaX5.c(57): error C141: syntax error near 'unsigned', expected '__asm'
+paulobetaX5.c(57): error C202: 'splitlimit': undefined identifier
+paulobetaX5.c(58): error C141: syntax error near 'int', expected '__asm'
+paulobetaX5.c(58): error C202: 'split': undefined identifier
+paulobetaX5.c(62): error C141: syntax error near 'int', expected '__asm'
+paulobetaX5.c(62): error C202: 'xnewkey': undefined identifier
+paulobetaX5.c(65): error C141: syntax error near 'void', expected '__asm'
+Target not created.
+Build Time Elapsed:  00:00:01

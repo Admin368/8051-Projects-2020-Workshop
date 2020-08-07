@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "keil",
+            "includePath": [
+                "C:\\Keil_v5\\C51\\INC",
+                "e:\\_MicroControllerWorkshop\\2020.07.16_Mon\\H1-Flowing_Lights"
+            ],
+            "defines": [
+                "__C51__",
+                "__VSCODE_C51__",
+                "reentrant=",
+                "compact=",
+                "small=",
+                "large=",
+                "data=",
+                "idata=",
+                "pdata=",
+                "bdata=",
+                "xdata=",
+                "code=",
+                "bit=char",
+                "sbit=char",
+                "sfr=char",
+                "sfr16=int",
+                "sfr32=int",
+                "interrupt=",
+                "using=",
+                "_at_=",
+                "_priority_=",
+                "_task_="
+            ],
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}

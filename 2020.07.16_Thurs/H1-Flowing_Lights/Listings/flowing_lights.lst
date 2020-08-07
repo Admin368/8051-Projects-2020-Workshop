@@ -1,0 +1,63 @@
+C51 COMPILER V9.60.0.0   FLOWING_LIGHTS                                                    07/17/2020 05:10:19 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE FLOWING_LIGHTS
+OBJECT MODULE PLACED IN .\Objects\flowing_lights.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE flowing_lights.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\flowing_lights.lst) TABS(2) OBJECT(.\Objects\flowing_lights.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "..\..\headers\paulobetaX6.c"
+   3          void outside_inward();
+   4          void center_outward();
+   5          void left_accumulation();
+   6          void right_accumulation();
+   7          void main(){
+   8   1          while(1){
+   9   2              xuplevels(~1);
+  10   2              //outside_inward();
+  11   2          }
+  12   1      }
+  13          void outside_inward(){
+  14   1          char x=1;
+  15   1          char y=8;
+  16   1          while(x<5){
+  17   2              x++;
+  18   2              y--;
+  19   2              xsecondsstatus=1; //resets xseconds status
+  20   2              while(xsecondsstatus==1){
+  21   3                  xseconds(1);
+  22   3                  while(1){
+  23   4                  xled(x);
+  24   4                  xled(y);
+  25   4                  }
+  26   3              }
+  27   2          }
+  28   1      }
+  29          void center_outward(){}
+  30          void left_accumulation(){}
+  31          void right_accumulation(){}
+  32          
+  33          /*
+  34          x-y
+  35          1-8
+  36          2-7
+  37          3-6
+  38          4-5
+  39          */
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    897    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     28       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[paulo]Matrix_Keyboard-V1.obj" 
+TO ".\Objects\MATRIX_KEYBOARD" 
+PRINT(".\Listings\MATRIX_KEYBOARD.m51") RAMSIZE(256) 

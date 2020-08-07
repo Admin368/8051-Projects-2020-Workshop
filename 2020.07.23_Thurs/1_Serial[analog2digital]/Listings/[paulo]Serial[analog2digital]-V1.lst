@@ -1,0 +1,291 @@
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL_ANALOG2DIGITAL__V1                                  07/23/2020 15:13:40 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _PAULO_SERIAL_ANALOG2DIGITAL__V1
+OBJECT MODULE PLACED IN .\Objects\[paulo]Serial[analog2digital]-V1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [paulo]Serial[analog2digital]-V1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECT
+                    -EXTEND PRINT(.\Listings\[paulo]Serial[analog2digital]-V1.lst) TABS(2) OBJECT(.\Objects\[paulo]Serial[analog2digital]-V1.
+                    -obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          /*
+   4          // WE CCONNECTED THE LIGHT SENSOR
+   5          THE VOLTAGE IS HIGH WENDARK ,AS ITS RESISTANCE IST SMALLEST
+   6          NO LIGHT = 5V [255] [HIGH RESISTANCE]
+   7          YES LIGHT = 0V [0]  [LOW RESISTANCE]
+   8          
+   9          CHAR HAS RANGE OF -127 TO 128
+  10          
+  11          UNSIGNED CHAR THO HAS 0-255
+  12          
+  13          
+  14          
+  15          */
+  16          
+  17          sbit Scl = P2^1;
+  18          sbit Sda = P2^0;
+  19          sbit selectionLatch = P2^7;
+  20          sbit dataLatch = P2^6;
+  21          
+  22          unsigned char upperThres  =  100; //we will set a range as resistaster may not reach 255 exact
+  23          unsigned char lowerThres  =  204;
+  24          unsigned char code segData[] =     // 0 to 9 codes for segment display
+  25          {0x3f,0x06,0x5b,
+  26          0x4f,0x66,0x6d,
+  27          0x7d,0x07,0x7f,0x6f}; 
+  28          
+  29          unsigned  char code segment[] =    // selection choice for one of the 6 display segments
+  30          {0xfe,0xfd,0xfb,
+  31          0xf7,0xef,0xdf};
+  32          
+  33          
+  34          void iic_start();     // start condition for data transmision on the IIC protocol           
+  35          void iic_send(unsigned char _data); // sending serial data using the IIC protocol
+  36          unsigned char iic_read();   // reading serial data using the IIC protocol
+  37          void iic_ack();     // acknowledge bit after sending a data byte
+  38          void iic_noAck();   // no acknowledge after receiving the last byte 
+  39          void iic_stop();    // stop condition after data transmision on the IIC protocol   
+  40          void myDAC(unsigned char _byte); // digital to analog conversion
+  41          unsigned char ADC(unsigned char channel); // analog to digital conversion
+  42          
+  43          void delay(char x);// delay function
+  44          void seg_disp(char seconds, char minutes); // display to the 7 segment
+  45            
+  46          void main()
+  47          {
+  48   1        unsigned char num = 0;
+  49   1        unsigned char flag = 0;
+  50   1        unsigned char count = 0;
+  51   1        unsigned char channel = 0;
+  52   1        num = ADC(channel);
+  53   1        while(1)
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL_ANALOG2DIGITAL__V1                                  07/23/2020 15:13:40 PAGE 2   
+
+  54   1        {
+  55   2          count ++;
+  56   2          if(count>=100)
+  57   2          {
+  58   3              num = ADC(channel); 
+  59   3              if(num>=upperThres){
+  60   4                // turn on the LEDS
+  61   4                  P1=0x00;
+  62   4                  P0=0xff;
+  63   4              }
+  64   3              if(num<upperThres){
+  65   4                  P1=0xff;
+  66   4                  P0=0x00;
+  67   4              }
+  68   3          }
+  69   2            
+  70   2          seg_disp(num,0);
+  71   2        }
+  72   1      }
+  73          void iic_start()
+  74          {
+  75   1        
+  76   1        Scl = 1;
+  77   1        _nop_();
+  78   1        Sda = 1;
+  79   1        _nop_();
+  80   1        Sda = 0;
+  81   1        
+  82   1      }
+  83          void iic_send(unsigned char _data)
+  84          {
+  85   1        char oneByte = 8;
+  86   1        char temp = 0x80; // 1000 0000
+  87   1        //1000 0000
+  88   1        //0XXX XXXX
+  89   1        //1XXX XXXX
+  90   1        
+  91   1        while(oneByte)
+  92   1        {
+  93   2          Scl = 0;   // added new line 1
+  94   2          if((temp&_data)==0)
+  95   2          //if(temp&_data==0) // changed this line 
+  96   2          {
+  97   3            Sda = 0;
+  98   3          }
+  99   2          else
+ 100   2          {
+ 101   3            Sda = 1;
+ 102   3          }
+ 103   2          Scl = 0;
+ 104   2          _nop_();
+ 105   2          Scl = 1;
+ 106   2          _nop_();  // added new line 2
+ 107   2          Scl = 0;  // added new line 3
+ 108   2          
+ 109   2          _data = _data<<1;
+ 110   2          oneByte--;
+ 111   2        }
+ 112   1        
+ 113   1      }
+ 114          
+ 115          unsigned char iic_read()
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL_ANALOG2DIGITAL__V1                                  07/23/2020 15:13:40 PAGE 3   
+
+ 116          {
+ 117   1           unsigned char check = 0x80;
+ 118   1           unsigned char read = 0;
+ 119   1           unsigned char bitCount=8;
+ 120   1      
+ 121   1           Sda=1;
+ 122   1           while(bitCount)
+ 123   1           {
+ 124   2            Scl=0;
+ 125   2                _nop_();
+ 126   2            Scl=1;
+ 127   2            _nop_();
+ 128   2            if(Sda==1)
+ 129   2            {
+ 130   3              read = read|check;
+ 131   3            }
+ 132   2            check = check>>1;
+ 133   2            bitCount--;
+ 134   2          }
+ 135   1          return(read);
+ 136   1      }
+ 137          
+ 138          void iic_ack()
+ 139          {
+ 140   1        Sda = 0;
+ 141   1        Scl = 0;
+ 142   1        _nop_();
+ 143   1        Scl = 1;
+ 144   1        _nop_();
+ 145   1        Scl = 0;
+ 146   1        
+ 147   1      }
+ 148          void iic_noAck()
+ 149          {
+ 150   1        Scl = 0;
+ 151   1        Sda = 1;
+ 152   1        _nop_();
+ 153   1        Scl = 1;
+ 154   1        _nop_();
+ 155   1        Scl = 0;
+ 156   1        
+ 157   1      }
+ 158          void iic_stop()
+ 159          {
+ 160   1        Scl = 1;
+ 161   1        _nop_();
+ 162   1        Sda = 0;
+ 163   1        _nop_();
+ 164   1        Sda = 1;
+ 165   1        
+ 166   1      }
+ 167          
+ 168          void myDAC(unsigned char _byte)
+ 169          {
+ 170   1        iic_start();
+ 171   1        iic_send(0x90); // write to D/A convertor
+ 172   1        iic_ack();
+ 173   1        iic_send(0x40); //enable analog out
+ 174   1        iic_ack();
+ 175   1        iic_send(_byte); // send data
+ 176   1        iic_ack();
+ 177   1        iic_stop();
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL_ANALOG2DIGITAL__V1                                  07/23/2020 15:13:40 PAGE 4   
+
+ 178   1      } 
+ 179            
+ 180          
+ 181          
+ 182          void delay(unsigned char x)// delay function
+ 183          {
+ 184   1        char y;
+ 185   1        while(x--)
+ 186   1          for(y =0; y<120; y++);
+ 187   1      }
+ 188          
+ 189          
+ 190          void seg_disp(unsigned char seconds, unsigned char minutes) // display to the 7 segment
+ 191          {
+ 192   1            char tens, ones;
+ 193   1            char mtens, mones;
+ 194   1            char t = 1; 
+ 195   1        
+ 196   1            tens = seconds/50;
+ 197   1            ones = (seconds%50)/10;
+ 198   1        
+ 199   1            mtens = minutes/10;
+ 200   1            mones = minutes%10;
+ 201   1        
+ 202   1            //seconds
+ 203   1            P0 = segment[5];
+ 204   1            selectionLatch = 1;
+ 205   1            selectionLatch = 0;
+ 206   1            
+ 207   1            P0 = segData[ones]; 
+ 208   1            dataLatch = 1;
+ 209   1            dataLatch = 0;
+ 210   1            delay(t);
+ 211   1            P0 = segment[4];
+ 212   1            selectionLatch = 1;
+ 213   1            selectionLatch = 0;
+ 214   1        
+ 215   1            P0 = segData[tens]|0x80; 
+ 216   1            dataLatch = 1;
+ 217   1            dataLatch = 0;
+ 218   1            delay(t);
+ 219   1            // minutes
+ 220   1            /*
+ 221   1            P0 = segment[3];
+ 222   1            selectionLatch = 1;
+ 223   1            selectionLatch = 0;
+ 224   1            
+ 225   1            P0 = segData[mones]; 
+ 226   1            dataLatch = 1;
+ 227   1            dataLatch = 0;
+ 228   1            delay(t);
+ 229   1            P0 = segment[2];
+ 230   1            selectionLatch = 1;
+ 231   1            selectionLatch = 0;
+ 232   1        
+ 233   1            P0 = segData[mtens]; 
+ 234   1            dataLatch = 1;
+ 235   1            dataLatch = 0;
+ 236   1            delay(t);
+ 237   1            */
+ 238   1      }
+ 239          
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL_ANALOG2DIGITAL__V1                                  07/23/2020 15:13:40 PAGE 5   
+
+ 240          unsigned char ADC(unsigned char channel)
+ 241          {
+ 242   1        char readData;
+ 243   1        iic_start();
+ 244   1        iic_send(0x90); // write to D/A convertor
+ 245   1        iic_ack();
+ 246   1        iic_send(0x40|channel); //enable analog out and read from channel
+ 247   1        iic_ack();
+ 248   1        
+ 249   1        iic_start();
+ 250   1        iic_send(0x91); // send read address
+ 251   1        iic_ack();
+ 252   1        readData = iic_read();
+ 253   1        iic_noAck();
+ 254   1        iic_stop();
+ 255   1        return readData;
+ 256   1      } 
+ 257          
+ 258            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    384    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

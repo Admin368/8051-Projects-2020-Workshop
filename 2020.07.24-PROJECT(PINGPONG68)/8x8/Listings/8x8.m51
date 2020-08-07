@@ -1,0 +1,268 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    07/25/2020  03:05:09  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\paulo8x8_v2.obj TO .\Objects\8x8 PRINT (.\Listings\8x8.m51)
+>>  RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\paulo8x8_v2.obj (PAULO8X8_V2)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FCAST)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (POW)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CHKFLOAT)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPCMP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPNEG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (EXP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (LOG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPSERIES)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE0)
+
+
+LINK MAP OF MODULE:  .\Objects\8x8 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000DH     UNIT         ?DT?PAULO8X8_V2
+            DATA    0015H     000AH     UNIT         ?DT?_POW?POW
+                    001FH     0001H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?LOG?LOG
+                    0020H.1   0000H.7                *** GAP ***
+            DATA    0021H     0004H     UNIT         ?DT?LOG?LOG
+            IDATA   0025H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0060H     INPAGE       ?PD?PAULO8X8_V2
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     047CH     UNIT         ?C?LIB_CODE
+            CODE    0C7CH     0135H     UNIT         ?PR?LOG?LOG
+            CODE    0DB1H     0117H     UNIT         ?PR?_POW?POW
+            CODE    0EC8H     009AH     UNIT         ?PR?EXP?EXP
+            CODE    0F62H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0FEEH     0089H     UNIT         ?PR?GET_BIN?PAULO8X8_V2
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/25/2020  03:05:09  PAGE 2
+
+
+            CODE    1077H     0054H     UNIT         ?PR?_GIGA?PAULO8X8_V2
+            CODE    10CBH     0044H     UNIT         ?C_INITSEG
+            CODE    110FH     0020H     UNIT         ?PR?DISPLAY?PAULO8X8_V2
+            CODE    112FH     0001H     UNIT         ?PR?MAIN?PAULO8X8_V2
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\8x8 (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?PAULO8X8_V2
+  +--> ?C_INITSEG
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\8x8 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0F62H         SEGMENT       ?C_C51STARTUP
+  I:0025H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0F65H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0F62H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0F62H         LINE#         133
+  C:0F64H         LINE#         134
+  C:0F65H         LINE#         135
+  C:0F66H         LINE#         136
+  C:0F68H         LINE#         185
+  C:0F6BH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/25/2020  03:05:09  PAGE 3
+
+
+
+  -------         MODULE        PAULO8X8_V2
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:1077H         PUBLIC        _giga
+  C:112FH         PUBLIC        main
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  D:0008H         PUBLIC        bin
+  X:0000H         PUBLIC        map
+  D:0009H         PUBLIC        col
+  X:0040H         PUBLIC        hex
+  D:000AH         PUBLIC        row
+  D:000BH         PUBLIC        ixx
+  C:0FEEH         PUBLIC        get_bin
+  D:00C8H         PUBLIC        T2CON
+  D:000CH         PUBLIC        tempbin
+  D:000DH         PUBLIC        bin_row
+  C:110FH         PUBLIC        display
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          GET_BIN
+  C:0FEEH         LINE#         23
+  C:0FEEH         LINE#         24
+  C:0FF1H         LINE#         25
+  C:1005H         LINE#         26
+  C:101AH         LINE#         27
+  C:1060H         LINE#         28
+  C:1066H         LINE#         29
+  C:106AH         LINE#         30
+  C:1071H         LINE#         31
+  C:1076H         LINE#         32
+  -------         ENDPROC       GET_BIN
+  -------         PROC          _GIGA
+  D:0007H         SYMBOL        rr
+  C:1077H         LINE#         33
+  C:1077H         LINE#         34
+  C:1082H         LINE#         35
+  C:108BH         LINE#         36
+  C:1094H         LINE#         37
+  C:109DH         LINE#         38
+  C:10A6H         LINE#         39
+  C:10AFH         LINE#         40
+  C:10B8H         LINE#         41
+  C:10C1H         LINE#         42
+  C:10CAH         LINE#         43
+  -------         ENDPROC       _GIGA
+  -------         PROC          DISPLAY
+  C:110FH         LINE#         45
+  C:110FH         LINE#         46
+  C:1124H         LINE#         49
+  C:1127H         LINE#         51
+  C:112AH         LINE#         53
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/25/2020  03:05:09  PAGE 4
+
+
+  C:112EH         LINE#         54
+  -------         ENDPROC       DISPLAY
+  -------         PROC          MAIN
+  C:112FH         LINE#         58
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        PAULO8X8_V2
+
+  -------         MODULE        ?C?FPMUL
+  C:0800H         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:0910H         PUBLIC        ?C?FCASTC
+  C:090BH         PUBLIC        ?C?FCASTI
+  C:0906H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:0944H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        POW
+  D:0015H         PUBLIC        ?_pow?BYTE
+  C:0DB1H         PUBLIC        _pow
+  -------         ENDMOD        POW
+
+  -------         MODULE        ?C?CHKFLOAT
+  C:09C5H         PUBLIC        ?C?CHKFLOAT
+  -------         ENDMOD        ?C?CHKFLOAT
+
+  -------         MODULE        ?C?FPADD
+  C:09E6H         PUBLIC        ?C?FPADD
+  C:09E2H         PUBLIC        ?C?FPSUB
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPCMP
+  C:0AD9H         PUBLIC        ?C?FPCMP
+  C:0AD7H         PUBLIC        ?C?FPCMP3
+  -------         ENDMOD        ?C?FPCMP
+
+  -------         MODULE        ?C?FPNEG
+  C:0B50H         PUBLIC        ?C?FPNEG
+  -------         ENDMOD        ?C?FPNEG
+
+  -------         MODULE        EXP
+  C:0F00H         PUBLIC        _EXP
+  -------         ENDMOD        EXP
+
+  -------         MODULE        LOG
+  C:0CB0H         PUBLIC        _LOG
+  C:0CACH         PUBLIC        _LOG10
+  -------         ENDMOD        LOG
+
+  -------         MODULE        ?C?FPDIV
+  C:0B64H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/25/2020  03:05:09  PAGE 5
+
+
+  -------         MODULE        ?C?LNEG
+  C:0C4EH         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LLDCODE
+  C:0C5CH         PUBLIC        ?C?LLDCODE
+  -------         ENDMOD        ?C?LLDCODE
+
+  -------         MODULE        ?C?LLDCODE0
+  C:0C6CH         PUBLIC        ?C?LLDCODE0
+  -------         ENDMOD        ?C?LLDCODE0
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GET_BIN?PAULO8X8_V2
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DISPLAY?PAULO8X8_V2
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0150H BYTE (16%) *
+******************************************************************************
+
+Program Size: data=36.1 xdata=96 code=2355
+LINK/LOCATE RUN COMPLETE.  2 WARNING(S),  0 ERROR(S)

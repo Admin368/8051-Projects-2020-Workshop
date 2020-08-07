@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[simon]digital_analog_convertor.obj" 
+TO ".\Objects\AD-DA" 
+PRINT(".\Listings\AD-DA.m51") RAMSIZE(256) 

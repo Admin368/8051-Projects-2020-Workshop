@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL2PC_V1                                               07/23/2020 16:50:44 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _PAULO_SERIAL2PC_V1
+OBJECT MODULE PLACED IN .\Objects\[paulo]Serial2PC_V1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [paulo]Serial2PC_V1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\[paulo]Serial2PC_V1.lst) TABS(2) OBJECT(.\Objects\[paulo]Serial2PC_V1.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<string.h>
+   3          #include "lcd_interface.c"
+   4          
+   5          #define uchar unsigned char
+   6          //SENDIND DATA TO MMCU
+   7          //USE BAURATE 9800
+   8          char myMSG[] = {"The world is a beautiful place\n"}; 
+   9          
+  10          void uart_init();
+  11          char uart_RX(); // receive data
+  12          
+  13          void main()
+  14          {
+  15   1        char i = 0;
+  16   1        uart_init();
+  17   1        lcd_init();
+  18   1        while(1)
+  19   1        {
+  20   2          
+  21   2            write_data(uart_RX());
+  22   2          
+  23   2          
+  24   2        }
+  25   1      }
+  26          
+  27          
+  28          void uart_init()
+  29          {
+  30   1        // initialize timer 1 in mode 2(8 bit auto reload)
+  31   1        TMOD = 0x20;
+  32   1        TH1 = 0xfd;
+  33   1        SCON = 0x50;
+  34   1        TR1 = 1;
+  35   1        RI =  0;
+  36   1      }
+  37          char uart_RX( )
+  38          {
+  39   1        char _data;
+  40   1        while(RI == 0);
+  41   1        _data = SBUF;
+  42   1        RI=0;
+  43   1        return _data;
+  44   1      
+  45   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    124    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     32       1
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   _PAULO_SERIAL2PC_V1                                               07/23/2020 16:50:44 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

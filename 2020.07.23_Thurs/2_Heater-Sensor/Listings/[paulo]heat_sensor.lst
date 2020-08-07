@@ -1,0 +1,304 @@
+C51 COMPILER V9.60.0.0   _PAULO_HEAT_SENSOR                                                07/23/2020 15:46:33 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _PAULO_HEAT_SENSOR
+OBJECT MODULE PLACED IN .\Objects\[paulo]heat_sensor.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [paulo]heat_sensor.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.
+                    -\Listings\[paulo]heat_sensor.lst) TABS(2) OBJECT(.\Objects\[paulo]heat_sensor.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>
+   3          
+   4          
+   5          sbit Scl = P2^1;
+   6          sbit Sda = P2^0;
+   7          sbit selectionLatch = P2^7;
+   8          sbit dataLatch = P2^6;
+   9          sbit buzzer = P3^0;
+  10          
+  11          //unsigned char upperThres = 160; 
+  12          unsigned char lowerThres = 50; 
+  13          
+  14          unsigned char code segData[] =     // 0 to 9 codes for segment display
+  15          {0x3f,0x06,0x5b,
+  16          0x4f,0x66,0x6d,
+  17          0x7d,0x07,0x7f,0x6f}; 
+  18          
+  19          unsigned  char code segment[] =    // selection choice for one of the 6 display segments
+  20          {0xfe,0xfd,0xfb,
+  21          0xf7,0xef,0xdf};
+  22          
+  23          
+  24          void iic_start();     // start condition for data transmision on the IIC protocol           
+  25          void iic_send(unsigned char _data); // sending serial data using the IIC protocol
+  26          unsigned char iic_read();   // reading serial data using the IIC protocol
+  27          void iic_ack();     // acknowledge bit after sending a data byte
+  28          void iic_noAck();   // no acknowledge after receiving the last byte 
+  29          void iic_stop();    // stop condition after data transmision on the IIC protocol   
+  30          void myDAC(unsigned char _byte); // digital to analog conversion
+  31          unsigned char ADC(unsigned char channel); // analog to digital conversion
+  32          
+  33          void delay(char x);// delay function
+  34          void seg_disp(char seconds, char minutes); // display to the 7 segment
+  35          
+  36          void warning_alarm(); // make the buzzer produce a warning alarm
+  37            
+  38          void main()
+  39          {
+  40   1        unsigned char num = 0;
+  41   1        unsigned char flag = 0;
+  42   1        unsigned char count = 0;
+  43   1        unsigned char channel = 0;
+  44   1        bit alarmFlag = 0;
+  45   1        
+  46   1        buzzer = 0; // turn off buzzer
+  47   1        num = ADC(channel);
+  48   1        
+  49   1        
+  50   1        
+  51   1        while(1)
+  52   1        {
+  53   2          if(alarmFlag)
+  54   2          {
+C51 COMPILER V9.60.0.0   _PAULO_HEAT_SENSOR                                                07/23/2020 15:46:33 PAGE 2   
+
+  55   3          warning_alarm(); // warning alarm
+  56   3          }
+  57   2          count ++;
+  58   2          if(count>=100)
+  59   2          {
+  60   3              num = ADC(channel); 
+  61   3            /*
+  62   3              if(num>=upperThres)
+  63   3              {
+  64   3                // turn on the LEDs
+  65   3                P1 = 0;
+  66   3              }
+  67   3            */
+  68   3              if(num<=lowerThres)
+  69   3              {
+  70   4                // turn on the alarm flag
+  71   4                alarmFlag = 1;
+  72   4              }
+  73   3          }
+  74   2            
+  75   2          seg_disp(num,0);
+  76   2        }
+  77   1      }
+  78          void iic_start()
+  79          {
+  80   1        
+  81   1        Scl = 1;
+  82   1        _nop_();
+  83   1        Sda = 1;
+  84   1        _nop_();
+  85   1        Sda = 0;
+  86   1        
+  87   1      }
+  88          void iic_send(unsigned char _data)
+  89          {
+  90   1        char oneByte = 8;
+  91   1        char temp = 0x80; // 1000 0000
+  92   1        //1000 0000
+  93   1        //0XXX XXXX
+  94   1        //1XXX XXXX
+  95   1        
+  96   1        while(oneByte)
+  97   1        {
+  98   2          Scl = 0;   // added new line 1
+  99   2          if((temp&_data)==0)
+ 100   2          //if(temp&_data==0) // changed this line 
+ 101   2          {
+ 102   3            Sda = 0;
+ 103   3          }
+ 104   2          else
+ 105   2          {
+ 106   3            Sda = 1;
+ 107   3          }
+ 108   2          Scl = 0;
+ 109   2          _nop_();
+ 110   2          Scl = 1;
+ 111   2          _nop_();  // added new line 2
+ 112   2          Scl = 0;  // added new line 3
+ 113   2          
+ 114   2          _data = _data<<1;
+ 115   2          oneByte--;
+ 116   2        }
+C51 COMPILER V9.60.0.0   _PAULO_HEAT_SENSOR                                                07/23/2020 15:46:33 PAGE 3   
+
+ 117   1        
+ 118   1      }
+ 119          
+ 120          unsigned char iic_read()
+ 121          {
+ 122   1           unsigned char check = 0x80;
+ 123   1           unsigned char read = 0;
+ 124   1           unsigned char bitCount=8;
+ 125   1      
+ 126   1           Sda=1;
+ 127   1           while(bitCount)
+ 128   1           {
+ 129   2            Scl=0;
+ 130   2                _nop_();
+ 131   2            Scl=1;
+ 132   2            _nop_();
+ 133   2            if(Sda==1)
+ 134   2            {
+ 135   3              read = read|check;
+ 136   3            }
+ 137   2            check = check>>1;
+ 138   2            bitCount--;
+ 139   2          }
+ 140   1          return(read);
+ 141   1      }
+ 142          
+ 143          void iic_ack()
+ 144          {
+ 145   1        Sda = 0;
+ 146   1        Scl = 0;
+ 147   1        _nop_();
+ 148   1        Scl = 1;
+ 149   1        _nop_();
+ 150   1        Scl = 0;
+ 151   1        
+ 152   1      }
+ 153          void iic_noAck()
+ 154          {
+ 155   1        Scl = 0;
+ 156   1        Sda = 1;
+ 157   1        _nop_();
+ 158   1        Scl = 1;
+ 159   1        _nop_();
+ 160   1        Scl = 0;
+ 161   1        
+ 162   1      }
+ 163          void iic_stop()
+ 164          {
+ 165   1        Scl = 1;
+ 166   1        _nop_();
+ 167   1        Sda = 0;
+ 168   1        _nop_();
+ 169   1        Sda = 1;
+ 170   1        
+ 171   1      }
+ 172          
+ 173          void myDAC(unsigned char _byte)
+ 174          {
+ 175   1        iic_start();
+ 176   1        iic_send(0x90); // write to D/A convertor
+ 177   1        iic_ack();
+ 178   1        iic_send(0x40); //enable analog out
+C51 COMPILER V9.60.0.0   _PAULO_HEAT_SENSOR                                                07/23/2020 15:46:33 PAGE 4   
+
+ 179   1        iic_ack();
+ 180   1        iic_send(_byte); // send data
+ 181   1        iic_ack();
+ 182   1        iic_stop();
+ 183   1      } 
+ 184            
+ 185          
+ 186          
+ 187          void delay(unsigned char x)// delay function
+ 188          {
+ 189   1        char y;
+ 190   1        while(x--)
+ 191   1          for(y =0; y<120; y++);
+ 192   1      }
+ 193          
+ 194          
+ 195          void seg_disp(unsigned char seconds, unsigned char minutes) // display to the 7 segment
+ 196          {
+ 197   1            char tens, ones;
+ 198   1            char mtens, mones;
+ 199   1            char t = 1; 
+ 200   1        
+ 201   1            tens = seconds/50;
+ 202   1            ones = (seconds%50)/10;
+ 203   1        
+ 204   1            mtens = minutes/10;
+ 205   1            mones = minutes%10;
+ 206   1        
+ 207   1            //seconds
+ 208   1            P0 = segment[5];
+ 209   1            selectionLatch = 1;
+ 210   1            selectionLatch = 0;
+ 211   1            
+ 212   1            P0 = segData[ones]; 
+ 213   1            dataLatch = 1;
+ 214   1            dataLatch = 0;
+ 215   1            delay(t);
+ 216   1            P0 = segment[4];
+ 217   1            selectionLatch = 1;
+ 218   1            selectionLatch = 0;
+ 219   1        
+ 220   1            P0 = segData[tens]|0x80; 
+ 221   1            dataLatch = 1;
+ 222   1            dataLatch = 0;
+ 223   1            delay(t);
+ 224   1            // minutes
+ 225   1            /*
+ 226   1            P0 = segment[3];
+ 227   1            selectionLatch = 1;
+ 228   1            selectionLatch = 0;
+ 229   1            
+ 230   1            P0 = segData[mones]; 
+ 231   1            dataLatch = 1;
+ 232   1            dataLatch = 0;
+ 233   1            delay(t);
+ 234   1            P0 = segment[2];
+ 235   1            selectionLatch = 1;
+ 236   1            selectionLatch = 0;
+ 237   1        
+ 238   1            P0 = segData[mtens]; 
+ 239   1            dataLatch = 1;
+ 240   1            dataLatch = 0;
+C51 COMPILER V9.60.0.0   _PAULO_HEAT_SENSOR                                                07/23/2020 15:46:33 PAGE 5   
+
+ 241   1            delay(t);
+ 242   1            */
+ 243   1      }
+ 244          
+ 245          unsigned char ADC(unsigned char channel)
+ 246          {
+ 247   1        char readData;
+ 248   1        iic_start();
+ 249   1        iic_send(0x90); // write to D/A convertor
+ 250   1        iic_ack();
+ 251   1        iic_send(0x40|channel); //enable analog out and read from channel
+ 252   1        iic_ack();
+ 253   1        
+ 254   1        iic_start();
+ 255   1        iic_send(0x91); // send read address
+ 256   1        iic_ack();
+ 257   1        readData = iic_read();
+ 258   1        iic_noAck();
+ 259   1        iic_stop();
+ 260   1        return readData;
+ 261   1      } 
+ 262          
+ 263          void warning_alarm() // make the buzzer produce a warning alarm
+ 264          {
+ 265   1          char t = 30;
+ 266   1        
+ 267   1          buzzer = 1;
+ 268   1          delay(t*3);
+ 269   1          buzzer = 0;
+ 270   1          delay(t);
+ 271   1      }
+ 272            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    397    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

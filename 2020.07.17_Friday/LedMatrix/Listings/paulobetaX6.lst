@@ -1,0 +1,561 @@
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PAULOBETAX6
+OBJECT MODULE PLACED IN .\Objects\paulobetaX6.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\headers\paulobetaX6.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND 
+                    -PRINT(.\Listings\paulobetaX6.lst) TABS(2) OBJECT(.\Objects\paulobetaX6.obj)
+
+line level    source
+
+   1          /*CHANGES
+   2          >>paulo.h
+   3              -The original Header file
+   4          >>paulobetaX.h
+   5              -elimination of 18 unncessary functions
+   6                  and replaced with 7 switch statements;
+   7              -burning size redution;
+   8              -replacement of unnecesary variables 
+   9                  with just actual values to savce space
+  10              -reduction of memory leakage
+  11          >>paulobetaX2.h
+  12              - fixed xsegement to call xdelayms() instead of delay();
+  13              - use of "x" before function names
+  14                  to avoid redifination of common names
+  15          >>paulobetaX3.h
+  16              - use of "x" before Global varaible names
+  17              - introduction  of xgetkey() function 
+  18                  that does row and column check;
+  19              - introduction of xtranslatekey(uchar key)
+  20                  to relate the key value to digits and letters;
+  21          >>paulobetaX4.h
+  22            - change of xdigit() to xdisplay:
+  23              coz 8bit seg is planned to show 
+  24              letters,symbols,and the digits;
+  25            - removed or P1 = key; at each key press
+  26            - introduction of xresetkey(); 
+  27              to reset all values to 0, to avoid noise
+  28              to other xgetkey() calls;
+  29            - intro of effector and letter array
+  30              into the xtranslatekey(); function
+  31            - brought old reference from paulo.h
+  32          >>paulobetaX5.h
+  33            - add a xTranslateLetter
+  34            - add xGetFullLetter 
+  35            - add xletter
+  36            - add getletter = true and use
+  37              xgetkey
+  38            - IO_Spliter function(input output separator)
+  39            - added xnewkey boleen to flag when new key pressed
+  40            - fixed wrong key translation of button 12;
+  41          >>paulobetaX6.h
+  42              - added second status definer
+  43              - addition of uplevels
+  44          */
+  45          //FUNCTION_CLAIM>>START
+  46          #include <reg52.h>
+  47          #include <intrins.h>
+  48          #define uchar unsigned char
+  49          sbit xseglock = P2^7;
+  50          sbit xsegdef = P2^7;
+  51          sbit xdiglock = P2^6;
+  52          sbit xdigdef = P2^6;
+  53          sbit xbuzzer = P2^0;
+  54          uchar xsegdelay = 1;
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 2   
+
+  55          uchar xdigdelay = 1;
+  56          uchar xkey,xprekey,xeffector,xletter;
+  57          
+  58          int unsplit;
+  59          uchar splitlimit = 4; // dont count 0;
+  60          int split[7+1];
+  61          
+  62          //enum bol {no, yes};
+  63          //enum bol xnewkey;
+  64          int xnewkey = 0;
+  65          uchar xsecondsstatus;
+  66          
+  67          //uchar xgeteffector,xgetletter;
+  68          void xbeep();                   //[paulobetaX1.h]
+  69          void xseconds(uchar mm);        //[paulobetaX1.h]
+  70          void xdelayms();                //[paulobetaX1.h]
+  71          void xdelay(uchar xx);          //[paulobetaX1.h]
+  72          void xled(uchar ld);            //[paulobetaX2.h]
+  73          void xsegment(uchar xseg);      //[paulobetaX2.h]
+  74          void xdisplay(uchar xdisp);     //[paulobetaX2.h]
+  75          void xgetfullkey();             //[paulobetaX2.h]
+  76          void xgetkey();                 //[paulobetaX3.h]
+  77          uchar xtranslatekey(uchar key); //[paulobetaX3.h]
+  78          void xtranslateeffector();      //[paulobetaX4.h]
+  79          void xresetkey();         //[paulobetaX4.h]
+  80          int xspliter(int unsplit);       //[paulobetaX5.h]
+  81          void xuplevels(uchar xup);       //[paulobetaX6.h]
+  82          void xdownlevels(char xdwn);     //[paulobetaX6.h]
+  83          //FUNCTION_CLAIM>>END
+  84          
+  85          //FUNCTIONS_MAIN>>START
+  86          void xbeep(){
+  87   1          xbuzzer = 1; // on
+  88   1          xdelay(400);
+  89   1          xbuzzer = 0;
+  90   1      }
+  91          void xseconds(uchar mm){
+  92   1          uchar mmm;
+  93   1          xsecondsstatus=1; //started counting
+  94   1        for (mmm=0;mmm<mm+1;mmm++)
+  95   1        {
+  96   2            xdelayms();
+  97   2        }
+  98   1          xsecondsstatus=0;//done counting
+  99   1      }
+ 100          void xdelayms(){
+ 101   1          uchar ii,jj,kk;
+ 102   1        _nop_();
+ 103   1        _nop_();
+ 104   1        ii = 5;
+ 105   1        jj = 52;
+ 106   1        kk = 195;
+ 107   1        do
+ 108   1        {
+ 109   2          do
+ 110   2          {
+ 111   3            while (--kk);
+ 112   3          } while (--jj);
+ 113   2        } while (--ii);
+ 114   1      }
+ 115          void xdelay(uchar xx){
+ 116   1          uchar xz,zx;
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 3   
+
+ 117   1          for (xz=0;xz<xx;xz++){
+ 118   2              for (zx=0;zx<120;zx++){}
+ 119   2          }
+ 120   1      }
+ 121          void xled(uchar ld){   
+ 122   1              if (ld == 1){P1 = 0xfe;} //led1 = 0xfe;
+ 123   1              if (ld == 2){P1 = 0xfd;} //led2 = 0xfd;
+ 124   1              if (ld == 3){P1 = 0xfb;} //led3 = 0xfb;
+ 125   1              if (ld == 4){P1 = 0xf7;} //led4 = 0xf7;
+ 126   1              if (ld == 5){P1 = 0xef;} //led5 = 0xef;
+ 127   1              if (ld == 6){P1 = 0xdf;} //led6 = 0xdf;
+ 128   1              if (ld == 7){P1 = 0xbf;} //led7 = 0xbf;
+ 129   1              if (ld == 8){P1 = 0x7f;} //led8 = 0x7f;
+ 130   1              if (ld == 0){P1 = 0xff;} //ledalloff = 0xff;
+ 131   1              if (ld == 00){P1 = 0xff;} //ledalloff = 0xff;
+ 132   1              if (ld == 11){P1 = 0x00;} //ledallon = 0x00;
+ 133   1              if (ld == 21){P1 = 0x0f;} //halfon1 = 0x0f;
+ 134   1              if (ld == 22){P1 = 0x0f;} //halfon2 = 0x0f;
+ 135   1      }
+ 136          void xsegment(uchar xseg){
+ 137   1          switch(xseg)
+ 138   1          {
+ 139   2            case 0:
+ 140   2              P0 = 0xff; //segnone = 0xff;
+ 141   2              break;
+ 142   2            case 1:
+ 143   2              P0 = 0xfe; //seg1 = 0xfe;
+ 144   2              break;
+ 145   2            case 2:
+ 146   2              P0 = 0xfd; //seg2 = 0xfd;
+ 147   2              break;
+ 148   2            case 3:
+ 149   2              P0 = 0xfb; //seg3 = 0xfb;
+ 150   2              break;
+ 151   2            case 4:
+ 152   2              P0 = 0xf7; //seg4 = 0xf7;
+ 153   2              break;
+ 154   2            case 5:
+ 155   2              P0 = 0xef; //seg5 = 0xef;
+ 156   2              break;
+ 157   2            case 6:
+ 158   2              P0 = 0xdf; //seg6 = 0xdf;
+ 159   2              break;
+ 160   2            case 11:
+ 161   2              P0 = 0x00; // segall = 0x00;
+ 162   2            default:
+ 163   2              xsegdef = 0;
+ 164   2              return;
+ 165   2            }
+ 166   1          xdelay(xsegdelay);
+ 167   1          xsegdef = 1;
+ 168   1          xsegdef = 0;
+ 169   1      }
+ 170          
+ 171          void xdisplay(uchar xdisp){
+ 172   1          char x2disp = xdisp;
+ 173   1          switch(x2disp)
+ 174   1              {  
+ 175   2                  case 0:
+ 176   2                      P0 = 0x3f; //dig0 = 0x3f;
+ 177   2                      break;
+ 178   2                  case 1:
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 4   
+
+ 179   2                      P0 = 0x06; //dig1 = 0x06;
+ 180   2                      break;
+ 181   2                  case 2:
+ 182   2                      P0 = 0x5b; //dig2 = 0x5b;
+ 183   2                      break; 
+ 184   2                  case 3:
+ 185   2                      P0 = 0x4f; //dig3 = 0x4f;
+ 186   2                      break;
+ 187   2                  case 4:
+ 188   2                      P0 = 0x66; //dig4 = 0x66;
+ 189   2                      break;
+ 190   2                  case 5: 
+ 191   2                      P0 = 0x6d; //dig5 = 0x6d;
+ 192   2                      break;
+ 193   2                  case 6:
+ 194   2                      P0 = 0x7d; //dig6 = 0x7d;
+ 195   2                      break;
+ 196   2                  case 7:
+ 197   2                      P0 = 0x07; //dig7 = 0x07;
+ 198   2                      break;
+ 199   2                  case 8:
+ 200   2                      P0 = 0x7f; //dig8 = 0x7f;
+ 201   2                      break;
+ 202   2                  case 9:
+ 203   2                      P0 = 0x6f; //dig9 = 0x6f;
+ 204   2                      break;
+ 205   2                  case 'n': //displays nothing 
+ 206   2                      P0 = 0x08;
+ 207   2                      break;
+ 208   2            default:
+ 209   2                      return;
+ 210   2              }
+ 211   1          xdigdef = 1;
+ 212   1          xdigdef = 0;
+ 213   1          xdelay(xdigdelay);
+ 214   1      }
+ 215          void xgetfullkey(){
+ 216   1          xgetkey();
+ 217   1          xtranslatekey(xprekey);
+ 218   1      }
+ 219          void xgetkey(){
+ 220   1          uchar colvalue,rowvalue;
+ 221   1        P3 = 0xf0;//columnCheck //11110000
+ 222   1        if(P3 != 0xf0){
+ 223   2          xdelay(10);//verifying button press
+ 224   2          if(P3 != 0xf0){//columnCheck //11110000
+ 225   3            colvalue=~0xf0|P3; //flips the 0to1 and vise vesa
+ 226   3            P3 = 0x0f;//rowCheck //00001111
+ 227   3            rowvalue = ~0x0f|P3;    // checking row
+ 228   3            xprekey = colvalue&rowvalue;  
+ 229   3              }
+ 230   2        }   
+ 231   1      }
+ 232          uchar xtranslatekey(uchar xprekey){
+ 233   1        //uchar xletter[6] = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z}
+ 234   1        //uchar xeffector[4] = {e0, e1, e2, e3, e4, e5}
+ 235   1        switch(xprekey){
+ 236   2            case 0xee:                  
+ 237   2              xkey = 1;
+ 238   2              xnewkey = 1;
+ 239   2              break;
+ 240   2            case 0xde:                  
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 5   
+
+ 241   2              xkey = 2;
+ 242   2              xnewkey = 1;
+ 243   2              break;                
+ 244   2            case 0xbe:                  
+ 245   2              xkey = 3;
+ 246   2              xnewkey = 1;
+ 247   2              break;                
+ 248   2            case 0x7e:                  
+ 249   2              xkey = 4; 
+ 250   2              xnewkey = 1;
+ 251   2              break;
+ 252   2            case 0xed:                  
+ 253   2              xkey = 5; 
+ 254   2              xnewkey = 1;
+ 255   2              break;
+ 256   2            case 0xdd:                  
+ 257   2              xkey = 6; 
+ 258   2              xnewkey = 1;
+ 259   2              break;                
+ 260   2            case 0xbd:                  
+ 261   2              xkey = 7; 
+ 262   2              xnewkey = 1;
+ 263   2              break;                
+ 264   2            case 0x7d:                  
+ 265   2              xkey = 8; 
+ 266   2              xnewkey = 1;
+ 267   2              break;                  
+ 268   2            case 0xeb:                  
+ 269   2              xkey = 9;
+ 270   2              xnewkey = 1;
+ 271   2              break;
+ 272   2            case 0xdb:                  
+ 273   2              xkey = 0; 
+ 274   2              xnewkey = 1;
+ 275   2              break;                
+ 276   2            case 0xbb:
+ 277   2              xkey = 11;                  
+ 278   2              xnewkey = 1;
+ 279   2              break;                
+ 280   2            case 0x7b:
+ 281   2              xkey = 12;
+ 282   2              xnewkey = 1;
+ 283   2              break;
+ 284   2            case 0xe7:
+ 285   2              xkey = 13;
+ 286   2              xnewkey = 1;
+ 287   2              break;
+ 288   2            case 0xd7:
+ 289   2              xkey = 14;                  
+ 290   2              xnewkey = 1;
+ 291   2              break;                
+ 292   2            case 0xb7:                  
+ 293   2              xkey= 15;
+ 294   2              xnewkey = 1;
+ 295   2              break;                
+ 296   2            case 0x77:                  
+ 297   2              xkey= 16;
+ 298   2              xnewkey = 1;
+ 299   2              break;                
+ 300   2            default:
+ 301   2              //xkey = 0;
+ 302   2              xnewkey = 0;
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 6   
+
+ 303   2               break;
+ 304   2          }
+ 305   1      return xkey;
+ 306   1      }
+ 307          
+ 308          void xgeteffector(){
+ 309   1            xgetkey(); 
+ 310   1            xtranslateeffector();
+ 311   1      } 
+ 312          void xtranslateeffector(){
+ 313   1            if (xprekey>0){
+ 314   2              switch(xkey){
+ 315   3                case 1:// addition +
+ 316   3                  xeffector = 1;
+ 317   3                  break;
+ 318   3                case 2:// subtraction -
+ 319   3                  xeffector = 2;
+ 320   3                  break;
+ 321   3                case 3:// division /
+ 322   3                  xeffector = 3;
+ 323   3                  break;
+ 324   3                case 4:// get result
+ 325   3                  xeffector = 4;
+ 326   3                  break;
+ 327   3                default:
+ 328   3                  break;
+ 329   3              }
+ 330   2            }
+ 331   1      }
+ 332          
+ 333          
+ 334          void xresetkey(){
+ 335   1        P3 = 0x00;
+ 336   1        xprekey = 0;
+ 337   1        xkey = 0;
+ 338   1        //xgeteffector = 0;
+ 339   1        //xgetletter = 0;
+ 340   1      }
+ 341          
+ 342          //void xgetletter(){}
+ 343          /*
+ 344          void xdisplayletter(){
+ 345            switch(xletter)
+ 346              case 1:
+ 347              P0 = 0x00;
+ 348              default:
+ 349          }
+ 350          */
+ 351          void xgetsidekeys(){}
+ 352          
+ 353          int xspliter(int unsplit){
+ 354   1        int limit = splitlimit;
+ 355   1          for(limit=limit;limit>0;limit--){
+ 356   2              int remender = unsplit%10;
+ 357   2              split[limit] = remender;
+ 358   2              unsplit = unsplit/10;
+ 359   2      }
+ 360   1      return split;
+ 361   1      }
+ 362          
+ 363          void xuplevels(char xup){
+ 364   1          if (xup == 0){P1 = 0xff;} //xuplevel_0
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 7   
+
+ 365   1          if (xup == 1){P1 = 0x7f;} //xuplevel_1
+ 366   1          if (xup == 2){P1 = 0x3f;} //xuplevel_2
+ 367   1          if (xup == 3){P1 = 0x1f;} //xuplevel_3
+ 368   1          if (xup == 4){P1 = 0x0f;} //xuplevel_4
+ 369   1          if (xup == 5){P1 = 0x07;} //xuplevel_5
+ 370   1          if (xup == 6){P1 = 0x03;} //xuplevel_6
+ 371   1          if (xup == 7){P1 = 0x01;} //xuplevel_7
+ 372   1          if (xup == 8){P1 = 0x00;} //uplevel_8 
+ 373   1      }
+ 374          
+ 375          void xdownlevels(char xdwn){
+ 376   1          if (xdwn == 0){P1 = 0xff;} //xdwnlevel_0
+ 377   1          if (xdwn == 1){P1 = 0xfe;} //xdwnlevel_1
+ 378   1          if (xdwn == 2){P1 = 0xfc;} //xdwnlevel_2
+ 379   1          if (xdwn == 3){P1 = 0xf8;} //xdwnlevel_3
+ 380   1          if (xdwn == 4){P1 = 0xf0;} //xdwnlevel_4
+ 381   1          if (xdwn == 5){P1 = 0xe0;} //xdwnlevel_5
+ 382   1          if (xdwn == 6){P1 = 0xc0;} //xdwnlevel_6
+ 383   1          if (xdwn == 7){P1 = 0x80;} //xdwnlevel_7
+ 384   1          if (xdwn == 8){P1 = 0x00;} //xdmnlevel_8 
+ 385   1      }
+ 386          
+ 387          //FUNCTIONS_MAIN>>END
+ 388          
+ 389          // REFERENCE //
+ 390          /*
+ 391          binary to hex
+ 392          0000=0  1000=8
+ 393          0001=1  1001=9
+ 394          0010=2  1010=A
+ 395          0011=3  1011=B
+ 396          0100=4  1100=C
+ 397          0101=5  1101=D
+ 398          0110=6  1110=E
+ 399          0111=7  1111=F
+ 400          
+ 401          //traffic lights
+ 402          red    // 0011 1111 > 0x3f
+ 403          green  // 1100 1111 > 0xcf
+ 404          yellow // 1111 0011 > 0xf3
+ 405          white  //1111 1100 > 0xfc
+ 406          
+ 407          red    // 0011 1111 > 1111 1100 >0xfc
+ 408          green  // 1100 1111 > 1111 0011 >0xf3
+ 409          yellow // 1111 0011 > 1100 1111 >0xcf
+ 410          white  //1111 1100  > 0011 1111 >0x3f
+ 411          
+ 412          //uplevels from 0 to led "on"
+ 413          0000 0000 0x00 //level8
+ 414          0000 0001 0x01 //level7
+ 415          0000 0011 0x03 //level6
+ 416          0000 0111 0x07 //level5
+ 417          0000 1111 0x0f //level4
+ 418          0001 1111 0x1f //level3
+ 419          0011 1111 0x3f //level2
+ 420          0111 1111 0x7f //level1
+ 421          1111 1111 0xff //level0
+ 422          
+ 423          //downlevels 
+ 424          0000 0000 0x00 8
+ 425          1000 0000 0x80 7
+ 426          1100 0000 0xc0 6
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 8   
+
+ 427          1110 0000 0xe0 5
+ 428          1111 0000 0xf0 4
+ 429          1111 1000 0xf8 3
+ 430          1111 1100 0xfc 2
+ 431          1111 1110 0xfe 1
+ 432          1111 1111 0xff 0
+ 433          downlevels(x)=uplevels(~x);
+ 434          //inlevels
+ 435          0000 0000 0x [0]
+ 436          1000 0001 0x [1]
+ 437          1100 0011 0x [2]
+ 438          1110 0111 0x [3]
+ 439          1111 1111 0x [4]
+ 440          
+ 441          outlevels
+ 442          0000 0000 0x [0]
+ 443          0001 1000 0x [1]
+ 444          0011 1100 0x [2]
+ 445          0111 1110 0x [3]
+ 446          1111 1111 0x [4]
+ 447          
+ 448          auto(levels)
+ 449          
+ 450          1111 1110 0xfe //led1
+ 451          1111 1101 0xfd //led2
+ 452          1111 1011 0xfb //led3
+ 453          1111 0111 0xf7 //led4
+ 454          1110 1111 0xef //led5
+ 455          1101 1111 0xdf //led6
+ 456          1011 1111 0xbf //led7
+ 457          0111 1111 0x7f //led8
+ 458          0000 0000 0x00
+ 459          1111 1111 0xff
+ 460          
+ 461          //digits_def //selected when 1
+ 462          // order of list sig. bit "hgfedcba"
+ 463          //Var    abcd efgh > hgfe dcba > binary    > hex
+ 464          dig1 = 0x06; //0bc0 0000 > 0000 0cb0 > 0000 0110 > 0x06;
+ 465          dig2 = 0x5b; //ab0d e0g0 > 0g0e d0ba > 0101 1011 > 0x5b;
+ 466          dig3 = 0x4f; //abcd 00g0 > 0g00 dcba > 0100 1111 > 0x4f;
+ 467          dig4 = 0x66; //0bc0 0fg0 > 0gf0 0cb0 > 0110 0110 > 0x66;
+ 468          dig5 = 0x6d; //a0cd 0fg0 > 0gf0 dc0a > 0110 1101 > 0x6d;
+ 469          dig6 = 0x7d; //a0cd efg0 > 0gfe dc0a > 0111 1101 > 0x7d;
+ 470          dig7 = 0x07; //abc0 0000 > 0000 0cba > 0000 0111 > 0x07;
+ 471          dig8 = 0x7f; //abcd efg0 > 0gfe dcba > 0111 1111 > 0x7f;
+ 472          dig9 = 0x6f; //abcd 0fg0 > 0gf0 dcba > 0110 1111 > 0x6f;
+ 473          dig0 = 0x3f; //abcd ef00 > 00fe dcba > 0011 1111 > 0x3f;
+ 474          
+ 475          //first wrong translation
+ 476          wdig1 = 0x06; //0bc0 0000 > 0000 0bc0 > 0000 0110 > 0x06;
+ 477          wdig2 = 0xad; //ab0d e0g0 > e0g0 ab0d > 1010 1101 > 0xad;
+ 478          wdig3 = 0x2f; //abcd 00g0 > 00g0 abcd > 0010 1111 > 0x2f;
+ 479          wdig4 = 0x66; //0bc0 0fg0 > 0fg0 0bc0 > 0110 0110 > 0x66;
+ 480          wdig5 = 0x6b; //a0cd 0fg0 > 0fg0 a0cd > 0110 1011 > 0x6b;
+ 481          wdig6 = 0xeb; //a0cd efg0 > efg0 a0cd > 1110 1011 > 0xeb;
+ 482          wdig6 = 0xeb; //a0cd efg0 > efg0 a0cd > 1110 1011 > 0xeb;
+ 483          wdig7 = 0x0e; //abc0 0000 > 0000 abc0 > 0000 1110 > 0x0e;
+ 484          wdig8 = 0xef; //abcd efg0 > efg0 abcd > 1110 1111 > 0xef;
+ 485          wdig9 = 0x6f; //abcd 0fg0 > 0fg0 abcd > 0110 1111 > 0x6f;
+ 486          wdig0 = 0xcf; //abcd ef00 > ef00 abcd > 1100 1111 > 0xcf;
+ 487          
+ 488          LETTERS
+C51 COMPILER V9.60.0.0   PAULOBETAX6                                                       07/17/2020 16:03:38 PAGE 9   
+
+ 489          01.A>abc0 efg0>1110 1110>0111 0111>0x77
+ 490          02.b>00cd efg0>0011 1110>0111 1100>0x7c
+ 491          03.c>000d e0g0>0001 1010>0101 1000>0x58
+ 492          04.d>0dcd e0g0>0111 1010>0101 1110>0x5e
+ 493          05.E>a00d efg0>1001 1110>0111 1001>0x79
+ 494          06.F>a000 efg0>1000 1110>0111 0001>0x71
+ 495          07.g>abcd 0fg0>1111 0110>0110 1111>0x6f
+ 496          08.h>00c0 efg0>0010 1110>0111 0100>0x64
+ 497          09.I>0000 ef00>0000 1100>0011 0000>0x30
+ 498          10.J>0bcd e000>0111 1000>0001 1110>0x1e
+ 499          11.K>!>0x00
+ 500          12.L>000d ef00>0001 1100>0011 1000>0x38
+ 501          13.M>!>0x00
+ 502          14.n>00c0 e0g0>0010 1010>0101 0100>0x54
+ 503          15.o>00cd e0g0>0011 1010>0101 1100>0x5c
+ 504          16.p>ab00 efg0>1100 1110>0111 0011>0x73
+ 505          17.q>abc0 0fg0>1110 0110>0110 0111>0x67
+ 506          18.r>0000 e0g0>0000 1010>0101 0000>0x50
+ 507          19.S>a0cd 0fg0>1011 0110>0110 1101>0x6d
+ 508          20.t>000d efg0>0001 1110>0111 1000>0x78
+ 509          21.u>00cd e000>0011 1000>0001 1100>0x1c
+ 510          22.V>!>0x00
+ 511          23.W>!>0x00
+ 512          24.X>0bc0 efg0>0110 1110>0111 0110>0x6e
+ 513          25.y>0bcd 0fg0>0111 0110>0110 1110>0x76
+ 514          26.Z>ab0d e0g0>1101 1010>0101 1011>0xda
+ 515          27..>0000 000h>0000 0001>1000 0000>0x80
+ 516          28._>000d 0000>0001 0000>0000 1000>0x08
+ 517          29.->0000 00g0>0000 0010>0100 0000>0x40
+ 518          
+ 519          */
+ 520          
+ 521          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    916    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     28       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

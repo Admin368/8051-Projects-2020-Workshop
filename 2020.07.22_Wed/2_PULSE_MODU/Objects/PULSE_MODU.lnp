@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[paulo]pulse_modu.obj" 
+TO ".\Objects\PULSE_MODU" 
+PRINT(".\Listings\PULSE_MODU.m51") RAMSIZE(256) 

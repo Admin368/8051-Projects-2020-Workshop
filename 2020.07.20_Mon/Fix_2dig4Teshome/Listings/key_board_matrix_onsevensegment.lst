@@ -1,0 +1,176 @@
+C51 COMPILER V9.60.0.0   KEY_BOARD_MATRIX_ONSEVENSEGMENT                                   07/20/2020 16:01:34 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE KEY_BOARD_MATRIX_ONSEVENSEGMENT
+OBJECT MODULE PLACED IN .\Objects\key_board_matrix_onsevensegment.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE key_board_matrix_onsevensegment.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTE
+                    -XTEND PRINT(.\Listings\key_board_matrix_onsevensegment.lst) TABS(2) OBJECT(.\Objects\key_board_matrix_onsevensegment.obj
+                    -)
+
+line level    source
+
+   1          /*Display the value corresponding to the key pressed on the keyboard matrix onto the seven 
+   2          segment display*/
+   3          #include<reg52.h>
+   4          sbit selectionLatch = P2^7;
+   5          sbit dataLatch = P2^6;
+   6          char show2=0; //0 for no and 1 for yes
+   7          char  dig1,pos1,dig2,pos2;
+   8          char reference; 
+   9          void seg_display(char hex,char position);
+  10          void delay(char x); // delay function
+  11          void main()
+  12          {
+  13   1        char keyCol;
+  14   1        char keyRow;
+  15   1        reference = 0xf0;
+  16   1        P3 = reference;
+  17   1        while(1)
+  18   1        {
+  19   2          P3 = reference;
+  20   2          if(P3!=reference) // key has been pressed
+  21   2          {
+  22   3              //debounce key
+  23   3              delay(50);
+  24   3            if(P3!=reference) //indeed key has been pressed
+  25   3            {
+  26   4              
+  27   4              keyCol = P3;
+  28   4              P3 = ~reference;
+  29   4              keyRow = P3;
+  30   4              switch(keyCol|keyRow)
+  31   4              {
+  32   5                case 0xee:
+  33   5                  show2=0;
+  34   5                  seg_display(0x06,0xfe);
+  35   5                  break;
+  36   5                case 0xde:
+  37   5                  show2=0;
+  38   5                  seg_display(0x5b,0xfd);
+  39   5                  break;
+  40   5                case 0xbe:
+  41   5                  show2=0;
+  42   5                  seg_display(0x4f,0xfb);
+  43   5                  break;
+  44   5                case 0x7e:
+  45   5                  show2=0;
+  46   5                  seg_display(0x66,0xf7);
+  47   5                  break;
+  48   5                case 0xed:
+  49   5                  show2=0;
+  50   5                  seg_display(0x6d,0xef);
+  51   5                  break;
+  52   5                case 0xdd:
+  53   5                  show2=0;
+C51 COMPILER V9.60.0.0   KEY_BOARD_MATRIX_ONSEVENSEGMENT                                   07/20/2020 16:01:34 PAGE 2   
+
+  54   5                  seg_display(0x7c,0xdf);
+  55   5                  break;
+  56   5                case 0xbd:
+  57   5                  show2=0;
+  58   5                  seg_display(0x07,0xfe);
+  59   5                  break;
+  60   5                case 0x7d:
+  61   5                  show2=0;
+  62   5                  seg_display(0xff,0xfd);
+  63   5                  break;
+  64   5                case 0xeb:
+  65   5                  show2=0;
+  66   5                  seg_display(0x67,0xfb);
+  67   5                  break;
+  68   5                case 0xdb://10
+  69   5                  show2=1;
+  70   5                  dig1=0x06;
+  71   5                  pos1=0xf7;
+  72   5                  dig2=0x3f;
+  73   5                  pos2=0xef;
+  74   5                  break;
+  75   5                case 0xbb://11
+  76   5                  show2=1;
+  77   5                  dig1=0x06;
+  78   5                  pos1=0xef;
+  79   5                  dig2=0x06;
+  80   5                  pos2=0xdf;
+  81   5                  break;
+  82   5                case 0x7b://12
+  83   5                  show2=1;
+  84   5                  dig1=0x06;
+  85   5                  pos1=0xfe;
+  86   5                  dig2=0x5b;
+  87   5                  pos2=0xfd;
+  88   5                  break;
+  89   5                case 0xe7://13
+  90   5                  show2=1;
+  91   5                  dig1=0x06;
+  92   5                  pos1=0xfb;
+  93   5                  dig2=0x4f;
+  94   5                  pos2=0xf7;
+  95   5                  break;
+  96   5                case 0xd7://14
+  97   5                  show2=1;
+  98   5                  dig1=0x06;
+  99   5                  pos1=0xf7;
+ 100   5                  dig2=0x66;
+ 101   5                  pos2=0xef;
+ 102   5                  break;
+ 103   5                case 0xb7://15
+ 104   5                  show2=1;
+ 105   5                  dig1=0x06;
+ 106   5                  pos1=0xef;
+ 107   5                  dig2=0x6d;
+ 108   5                  pos2=0xdf;
+ 109   5                  break;
+ 110   5                case 0x77://16
+ 111   5                  show2=1;
+ 112   5                  dig1=0x06;
+ 113   5                  pos1=0xfe;
+ 114   5                  dig2=0x7c;
+ 115   5                  pos2=0xfd;
+C51 COMPILER V9.60.0.0   KEY_BOARD_MATRIX_ONSEVENSEGMENT                                   07/20/2020 16:01:34 PAGE 3   
+
+ 116   5                  break;
+ 117   5                default:
+ 118   5                  break;
+ 119   5              }
+ 120   4              
+ 121   4            }
+ 122   3          } 
+ 123   2          if(P3==reference){
+ 124   3            if(show2==1){
+ 125   4              seg_display(dig1,pos1);
+ 126   4              delay(2);
+ 127   4              seg_display(dig2,pos2);
+ 128   4              delay(2);
+ 129   4            }
+ 130   3          }
+ 131   2        }
+ 132   1      }
+ 133          void seg_display(char hex,char position)
+ 134          {
+ 135   1        P0 = position;
+ 136   1        selectionLatch = 1;
+ 137   1        selectionLatch = 0;
+ 138   1        P0 = hex; 
+ 139   1        dataLatch = 1;
+ 140   1        dataLatch = 0;
+ 141   1      }
+ 142          void delay(char x) // delay function
+ 143          {
+ 144   1        char y;
+ 145   1        while(x--)
+ 146   1          for(y=0; y<120; y++);
+ 147   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    384    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

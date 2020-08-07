@@ -1,0 +1,37 @@
+C51 COMPILER V9.60.0.0   LED                                                               07/16/2020 17:23:03 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\led.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE led.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\led.l
+                    -st) TABS(2) OBJECT(.\Objects\led.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include "..\..\headers\paulobetaX5.c"
+   3          void main(){
+   4   1        int px;
+   5   1        while(1){
+   6   2          for(px=0;px<8;px++){
+   7   3          xled(px);
+   8   3          xseconds(1);
+   9   3          xled(0);
+  10   3          xseconds(1);
+  11   3          }
+  12   2        }
+  13   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    787    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

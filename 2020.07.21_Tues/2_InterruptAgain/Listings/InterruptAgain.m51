@@ -1,0 +1,209 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    07/27/2020  17:55:22  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\[paulo]Interupt.obj TO .\Objects\InterruptAgain PRINT (.\Li
+>> stings\InterruptAgain.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\[paulo]Interupt.obj (_PAULO_INTERUPT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\InterruptAgain (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?_PAULO_INTERUPT
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0008H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+                    000EH     07F2H                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     002EH     UNIT         ?PR?TIMER0_INTERRUPT?_PAULO_INTERUPT
+            CODE    08BAH     0020H     UNIT         ?PR?TIMER0_PULL?_PAULO_INTERUPT
+            CODE    08DAH     001DH     UNIT         ?PR?_DELAY?_PAULO_INTERUPT
+            CODE    08F7H     000CH     UNIT         ?PR?TIMER0_INIT?_PAULO_INTERUPT
+            CODE    0903H     000AH     UNIT         ?PR?MAIN?_PAULO_INTERUPT
+            CODE    090DH     0005H     UNIT         ?PR?SETUP_INTERRUPT?_PAULO_INTERUPT
+            CODE    0912H     0004H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\InterruptAgain (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?_PAULO_INTERUPT
+  +--> ?C_INITSEG
+
+?PR?MAIN?_PAULO_INTERUPT
+  +--> ?PR?TIMER0_INIT?_PAULO_INTERUPT
+  +--> ?PR?TIMER0_PULL?_PAULO_INTERUPT
+
+?PR?TIMER0_PULL?_PAULO_INTERUPT
+  +--> ?PR?_DELAY?_PAULO_INTERUPT
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/27/2020  17:55:22  PAGE 2
+
+
+*** NEW ROOT ***************************************************
+
+?PR?TIMER0_INTERRUPT?_PAULO_INTERUPT
+  +--> ?PR?_DELAY?_PAULO_INTERUPT
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\InterruptAgain (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:0009H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        _PAULO_INTERUPT
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:090DH         PUBLIC        setup_interrupt
+  D:00A8H         PUBLIC        IE
+  C:08DAH         PUBLIC        _delay
+  D:00B8H         PUBLIC        IP
+  B:0080H.7       PUBLIC        buzzer
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/27/2020  17:55:22  PAGE 3
+
+
+  C:0903H         PUBLIC        main
+  C:088CH         PUBLIC        timer0_interrupt
+  D:0008H         PUBLIC        count
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:00A8H.1       PUBLIC        ET0
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  C:08F7H         PUBLIC        timer0_init
+  C:08BAH         PUBLIC        timer0_pull
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  C:0903H         LINE#         8
+  C:0903H         LINE#         9
+  C:0905H         LINE#         10
+  C:0908H         LINE#         11
+  C:0908H         LINE#         12
+  C:090BH         LINE#         13
+  -------         ENDPROC       MAIN
+  -------         PROC          TIMER0_INIT
+  C:08F7H         LINE#         16
+  C:08F7H         LINE#         18
+  C:08FAH         LINE#         20
+  C:08FDH         LINE#         21
+  C:0900H         LINE#         23
+  C:0902H         LINE#         25
+  -------         ENDPROC       TIMER0_INIT
+  -------         PROC          TIMER0_PULL
+  C:08BAH         LINE#         27
+  C:08BAH         LINE#         28
+  C:08BDH         LINE#         29
+  C:08BFH         LINE#         30
+  C:08C1H         LINE#         31
+  C:08CEH         LINE#         32
+  C:08D0H         LINE#         33
+  C:08D2H         LINE#         34
+  C:08D7H         LINE#         35
+  C:08D9H         LINE#         37
+  C:08D9H         LINE#         38
+  -------         ENDPROC       TIMER0_PULL
+  -------         PROC          _DELAY
+  D:0007H         SYMBOL        x
+  -------         DO            
+  D:0006H         SYMBOL        y
+  -------         ENDDO         
+  C:08DAH         LINE#         40
+  C:08DAH         LINE#         41
+  C:08DAH         LINE#         43
+  C:08E0H         LINE#         44
+  C:08F6H         LINE#         45
+  -------         ENDPROC       _DELAY
+  -------         PROC          SETUP_INTERRUPT
+  C:090DH         LINE#         47
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  07/27/2020  17:55:22  PAGE 4
+
+
+  C:090DH         LINE#         48
+  C:090FH         LINE#         49
+  C:0911H         LINE#         54
+  -------         ENDPROC       SETUP_INTERRUPT
+  -------         PROC          TIMER0_INTERRUPT
+  C:088CH         LINE#         57
+  C:089BH         LINE#         58
+  C:089EH         LINE#         59
+  C:08A1H         LINE#         60
+  C:08A3H         LINE#         61
+  C:08A8H         LINE#         62
+  C:08ABH         LINE#         63
+  C:08ADH         LINE#         64
+  -------         ENDPROC       TIMER0_INTERRUPT
+  -------         ENDMOD        _PAULO_INTERUPT
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SETUP_INTERRUPT?_PAULO_INTERUPT
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 009BH BYTE ( 7%) *
+******************************************************************************
+
+Program Size: data=10.0 xdata=0 code=284
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

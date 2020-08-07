@@ -1,0 +1,11 @@
+-letters
+-random effects shiffing bits
+
+-timer(hr,min,sec) function
+-generalized array to store words
+-lcd initialization
+-lcd send words
+-lcd push words
+
+-counter
+-interupt

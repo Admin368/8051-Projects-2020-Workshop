@@ -1,0 +1,157 @@
+C51 COMPILER V9.60.0.0   _SIMON_TIMER__MODED_                                              07/21/2020 14:38:42 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _SIMON_TIMER__MODED_
+OBJECT MODULE PLACED IN .\Objects\[simon]timer_{moded}.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [simon]timer_{moded}.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                    -(.\Listings\[simon]timer_{moded}.lst) TABS(2) OBJECT(.\Objects\[simon]timer_{moded}.obj)
+
+line level    source
+
+   1          
+   2          #include<reg52.h>
+   3          
+   4          sbit buzzer = P0^7;
+   5          sbit selectionLatch = P2^7;
+   6          sbit dataLatch = P2^6;
+   7          
+   8          char count =0;
+   9          char seconds = 0;
+  10          char minutes = 0;
+  11          
+  12          char code segData[] =    // 0 to 9 codes for segment display
+  13          {0x3f,0x06,0x5b,
+  14          0x4f,0x66,0x6d,
+  15          0x7d,0x07,0x7f,0x6f}; 
+  16          
+  17          char code segment[] =    // selection choice for one of the 6 display segments
+  18          {0xfe,0xfd,0xfb,
+  19          0xf7,0xef,0xdf};
+  20          
+  21          void seg_disp(char seconds,char minutes); // display to the 7 segment
+  22          void init_timer(); // timer initialization
+  23          void delay(char x);// delay function
+  24          
+  25          void main()
+  26          {
+  27   1        init_timer();
+  28   1        while(1)
+  29   1        {
+  30   2          //
+  31   2          seg_disp(seconds, minutes);
+  32   2        }
+  33   1      }
+  34          
+  35          
+  36          
+  37          void init_timer() // timer initialization
+  38          {
+  39   1        //TMOD
+  40   1          TMOD = 0x01; // timer 0 in timer mode 1
+  41   1        //initial value to the timer
+  42   1          TH0 = (65536-46082)/256;
+  43   1          TL0 = (65536-46082)%256;  
+  44   1        //TCON
+  45   1          TR0 = 1;
+  46   1        
+  47   1        // setup interrupt
+  48   1        EA = 1;
+  49   1        ET0 = 1;
+  50   1        
+  51   1        
+  52   1      } 
+  53          
+  54          void seg_disp(char seconds, char minutes) // display to the 7 segment
+C51 COMPILER V9.60.0.0   _SIMON_TIMER__MODED_                                              07/21/2020 14:38:42 PAGE 2   
+
+  55          {
+  56   1            char tens, ones;
+  57   1            char mtens, mones;
+  58   1            char t = 2; 
+  59   1        
+  60   1            tens = seconds/10;
+  61   1            ones = seconds%10;
+  62   1        
+  63   1            mtens = minutes/10;
+  64   1            mones = minutes%10;
+  65   1        
+  66   1            //seconds
+  67   1            P0 = segment[5];
+  68   1            selectionLatch = 1;
+  69   1            selectionLatch = 0;
+  70   1            
+  71   1            P0 = segData[ones]; 
+  72   1            dataLatch = 1;
+  73   1            dataLatch = 0;
+  74   1            delay(t);
+  75   1            P0 = segment[4];
+  76   1            selectionLatch = 1;
+  77   1            selectionLatch = 0;
+  78   1        
+  79   1            P0 = segData[tens]; 
+  80   1            dataLatch = 1;
+  81   1            dataLatch = 0;
+  82   1            delay(t);
+  83   1            // minutes
+  84   1            P0 = segment[3];
+  85   1            selectionLatch = 1;
+  86   1            selectionLatch = 0;
+  87   1            
+  88   1            P0 = segData[mones]; 
+  89   1            dataLatch = 1;
+  90   1            dataLatch = 0;
+  91   1            delay(t);
+  92   1            P0 = segment[2];
+  93   1            selectionLatch = 1;
+  94   1            selectionLatch = 0;
+  95   1        
+  96   1            P0 = segData[mtens]; 
+  97   1            dataLatch = 1;
+  98   1            dataLatch = 0;
+  99   1            delay(t);
+ 100   1      }
+ 101          void delay(char x)// delay function
+ 102          {
+ 103   1        char y;
+ 104   1        while(x--)
+ 105   1          for(y =0; y<120; y++);
+ 106   1      }
+ 107          
+ 108          void timer_0_interrupt() interrupt 1
+ 109          {
+ 110   1            // reload timer
+ 111   1            TH0 = (65536-46082)/256;
+ 112   1            TL0 = (65536-46082)%256;
+ 113   1            //count time
+ 114   1            count++;
+ 115   1            if(count>=20)
+ 116   1            {
+C51 COMPILER V9.60.0.0   _SIMON_TIMER__MODED_                                              07/21/2020 14:38:42 PAGE 3   
+
+ 117   2              buzzer = 1;
+ 118   2              delay(10);
+ 119   2              buzzer = 0;
+ 120   2              count = 0;
+ 121   2              
+ 122   2              seconds++;
+ 123   2              if(seconds>4)
+ 124   2              {
+ 125   3                  minutes++;
+ 126   3                  seconds = 0;
+ 127   3              }
+ 128   2            }
+ 129   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    300    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

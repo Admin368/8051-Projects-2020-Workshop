@@ -1,0 +1,169 @@
+C51 COMPILER V9.60.0.0   LCD_2                                                             07/19/2020 17:33:57 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD_2
+OBJECT MODULE PLACED IN .\Objects\lcd_2.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd_2.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd
+                    -_2.lst) TABS(2) OBJECT(.\Objects\lcd_2.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          sbit rs = P2^3; // register select
+   4          sbit rw = P2^4; // read/write
+   5          sbit en = P2^5; // read/write enable
+   6          
+   7          char yourdata2[] ={"here I come"};
+   8          char yourdata1[] ={"Hello world"};
+   9          
+  10          char yourdata4[] ={"By Ubyte    "};
+  11          char yourdata3[] ={"MCU workshop"};
+  12            
+  13          void lcd_init(); // lcd initialization
+  14          void write_com(char com); //write command
+  15          void write_data(char _data); // write data
+  16          
+  17          void delay(char x);// delay function
+  18          void main()
+  19          {
+  20   1        char i;
+  21   1        lcd_init();
+  22   1        delay(20);
+  23   1        
+  24   1        while(1)
+  25   1        {
+  26   2          //first information
+  27   2          //display on line 1
+  28   2          write_com(0x80+17);
+  29   2          delay(10);
+  30   2          
+  31   2          for(i =0; i<11; i++)
+  32   2          {
+  33   3            write_data(yourdata1[i]);
+  34   3            delay(10);
+  35   3          }
+  36   2          //display on line 2
+  37   2          write_com(0xc0+17);
+  38   2          delay(10);
+  39   2          
+  40   2          for(i =0; i<11; i++)
+  41   2          {
+  42   3            write_data(yourdata2[i]);
+  43   3            delay(10);
+  44   3          }
+  45   2        
+  46   2          // shift in the data
+  47   2          for(i =0; i<12+16-11; i++)
+  48   2          {
+  49   3            write_com(0x18);
+  50   3            delay(100);
+  51   3          }
+  52   2          delay(250);
+  53   2          delay(250);
+  54   2          delay(250);
+C51 COMPILER V9.60.0.0   LCD_2                                                             07/19/2020 17:33:57 PAGE 2   
+
+  55   2          delay(250);
+  56   2          // shift out the data
+  57   2          for(i =0; i<12+16-11; i++)
+  58   2          {
+  59   3            write_com(0x1c);
+  60   3            delay(10);
+  61   3          }
+  62   2          // second information
+  63   2          //display on line 1
+  64   2          write_com(0x80+17);
+  65   2          delay(10);
+  66   2          
+  67   2          for(i =0; i<12; i++)
+  68   2          {
+  69   3            write_data(yourdata3[i]);
+  70   3            delay(10);
+  71   3          }
+  72   2          //display on line 2
+  73   2          write_com(0xc0+17);
+  74   2          delay(10);
+  75   2          
+  76   2          for(i =0; i<12; i++)
+  77   2          {
+  78   3            write_data(yourdata4[i]);
+  79   3            delay(10);
+  80   3          }
+  81   2          
+  82   2          // shift in the data
+  83   2          for(i =0; i<14+16-13; i++)
+  84   2          {
+  85   3            write_com(0x18);
+  86   3            delay(100);
+  87   3          }
+  88   2          delay(250);
+  89   2          delay(250);
+  90   2          delay(250);
+  91   2          delay(250);
+  92   2          // shift out the data
+  93   2          for(i =0; i<14+16-13; i++)
+  94   2          {
+  95   3            write_com(0x1c);
+  96   3            delay(10);
+  97   3          }
+  98   2          
+  99   2        }
+ 100   1      }
+ 101          
+ 102          void lcd_init() // lcd initialization
+ 103          {
+ 104   1          // prepare the screen ->16*2 cells, 5*7 matrix for each cell
+ 105   1          write_com(0x38);
+ 106   1          // turn on display
+ 107   1          write_com(0x08);
+ 108   1          // clear the screen
+ 109   1          write_com(1);
+ 110   1          // prepare cursor and data pointer
+ 111   1          write_com(6);
+ 112   1          // cursor setup
+ 113   1          write_com(0x0c);
+ 114   1          
+ 115   1      }
+ 116          void write_com(char com) //write command
+C51 COMPILER V9.60.0.0   LCD_2                                                             07/19/2020 17:33:57 PAGE 3   
+
+ 117          {
+ 118   1        rs = 0; rw =0; P0 = com;
+ 119   1        en = 0;
+ 120   1        delay(10);
+ 121   1        en = 1;
+ 122   1        delay(10);
+ 123   1        en = 0;
+ 124   1      }
+ 125          void write_data(char _data) // write data
+ 126          {
+ 127   1        rs = 1;  rw = 0; P0 = _data;
+ 128   1        en = 0;
+ 129   1        delay(10);
+ 130   1        en = 1;
+ 131   1        delay(10);
+ 132   1        en = 0;
+ 133   1        
+ 134   1      }
+ 135          
+ 136          void delay(char x)// delay function
+ 137          {
+ 138   1        char y;
+ 139   1        while(x--)
+ 140   1          for(y =0; y<120; y++);
+ 141   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    467    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     50       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

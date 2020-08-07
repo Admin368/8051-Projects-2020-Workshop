@@ -1,0 +1,89 @@
+C51 COMPILER V9.60.0.0   LCD                                                               07/18/2020 16:23:23 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd.l
+                    -st) TABS(2) OBJECT(.\Objects\lcd.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "..\..\headers\paulobetaX5.c"
+   3          sbit rs = P2^3;// REGISTER SELECT
+   4          sbit rw = P2^4;// READ/WRITE
+   5          sbit en = P2^5;// READ/WRITE ENABLE
+   6          char yourdata[]={"Ubyte.cn"};
+   7          char pdelay=10;
+   8          void lcd_init();
+   9          void write_com(char com); //WRITE COMMANDS
+  10          void write_data(char _data); // WRITE COMMANDS
+  11          void main(){
+  12   1        char i;
+  13   1        lcd_init();
+  14   1        xdelay(20);
+  15   1        //write_data('a');
+  16   1        for(i=0;i<8;i++){
+  17   2          write_data(yourdata[i]);
+  18   2          xdelay(10);
+  19   2        }
+  20   1        while(1){
+  21   2        }
+  22   1      }
+  23          void lcd_init(){
+  24   1      //PREPARE THE SCREEN -16*2 5*7 MATRIX
+  25   1        write_com(0x38);
+  26   1      //turn on display
+  27   1        write_com(0x08);
+  28   1      //CLEAR SCREEN
+  29   1        //write_com(hex of 1);
+  30   1        write_com(1);
+  31   1      //PREPARE COURSOR  AND DATA POINTER
+  32   1        //INCREMENT CURSOR AFTER ENTER BY SENTING 0X06
+  33   1        write_com(0x06);
+  34   1        write_com(6);
+  35   1        //write_com(0x80);
+  36   1        //CURSOR SETUP
+  37   1        write_com(0x0c);
+  38   1      }
+  39          
+  40          void write_com(char com){
+  41   1      //>TO WRITE DCOMMAND | RS=LOW,RW=LOW ,(SEND DATA),(CREATE PURSE)
+  42   1      //>(SEND DATA) WITH P0;
+  43   1      // delay by 150 nanoseconds "tpw" 
+  44   1        rw=0 ; rs=0; P0 = com;
+  45   1        en = 0;
+  46   1        xdelay(pdelay);
+  47   1        en = 1;
+  48   1        xdelay(pdelay);
+  49   1        en=0;
+  50   1      }
+  51          void write_data(char _data){
+  52   1      //>TO WRITE DATA (rs=1,rw=0, datat to P0; then send pulse
+  53   1        rs=1; rw=0; P0= _data;
+  54   1        //PULSE
+C51 COMPILER V9.60.0.0   LCD                                                               07/18/2020 16:23:23 PAGE 2   
+
+  55   1        en = 0;
+  56   1        xdelay(pdelay);
+  57   1        en = 1;
+  58   1        xdelay(pdelay);
+  59   1        en=0;
+  60   1      }
+  61            
+  62          
+  63            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    854    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     37       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

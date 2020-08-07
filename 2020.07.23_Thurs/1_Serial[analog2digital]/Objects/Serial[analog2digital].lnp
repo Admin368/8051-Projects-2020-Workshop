@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[paulo]Serial[analog2digital]-V1.obj" 
+TO ".\Objects\Serial[analog2digital]" 
+PRINT(".\Listings\Serial[analog2digital].m51") RAMSIZE(256) 

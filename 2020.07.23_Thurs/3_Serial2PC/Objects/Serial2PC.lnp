@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\[paulo]Serial2PC_V1.obj" 
+TO ".\Objects\Serial2PC" 
+PRINT(".\Listings\Serial2PC.m51") RAMSIZE(256) 

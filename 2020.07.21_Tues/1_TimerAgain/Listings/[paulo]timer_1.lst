@@ -1,0 +1,71 @@
+C51 COMPILER V9.60.0.0   _PAULO_TIMER_1                                                    07/21/2020 15:16:43 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _PAULO_TIMER_1
+OBJECT MODULE PLACED IN .\Objects\[paulo]timer_1.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [paulo]timer_1.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Lis
+                    -tings\[paulo]timer_1.lst) TABS(2) OBJECT(.\Objects\[paulo]timer_1.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          //#include "../../headers/paulobetaX6.c"
+   3          char count =0;
+   4          sbit buzzer = P0^7;
+   5          void timer0_init();
+   6          void timer0_pull();
+   7          void delay(char x);
+   8          void main(){
+   9   1        buzzer = 0;
+  10   1        timer0_init();
+  11   1        while(1){
+  12   2            timer0_pull();
+  13   2          }
+  14   1      }
+  15          
+  16          void timer0_init(){ //if we repeat this process 20 times its 1 sec
+  17   1        //SET THE TMODE REGISTER
+  18   1        TMOD = 0x01;
+  19   1        //INIT THE TIMER
+  20   1        TH0 = (65536-46082)/256;
+  21   1        TL0 = (65536-46082)%256;
+  22   1        //START TIMER
+  23   1        TR0=1;
+  24   1        //WEN EVER IT OVERFLOWS IT INCREMENTS COUNT
+  25   1      }
+  26          
+  27          void timer0_pull(){
+  28   1        while(TF0==0);
+  29   1        TF0 = 0; //reset overflow flag
+  30   1        count++;// increment count
+  31   1        if(count==20){
+  32   2              count=0;//timer 0 has counted up to 1 sec
+  33   2              buzzer=1;
+  34   2              delay(5);
+  35   2              buzzer=0;
+  36   2              //after this we need to reload timer0init with same value
+  37   2        }
+  38   1      }
+  39          
+  40          void delay(char x)// delay function
+  41          {
+  42   1        char y;
+  43   1        while(x--)
+  44   1          for(y =0; y<120; y++);
+  45   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     83    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.60.0.0   _PAULO_TIMER_1                                                    07/21/2020 15:16:43 PAGE 2   
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

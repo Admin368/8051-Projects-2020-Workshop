@@ -1,0 +1,13 @@
+  
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling header6.c...
+../../headers/paulobetaX6.c(391): error C141: syntax error near '0000', expected 'hdata'
+../../headers/paulobetaX6.c(391): error C281: illegal hex constant
+../../headers/paulobetaX6.c(392): error C281: illegal hex constant
+../../headers/paulobetaX6.c(393): error C281: illegal hex constant
+../../headers/paulobetaX6.c(394): error C281: illegal hex constant
+../../headers/paulobetaX6.c(395): error C281: illegal hex constant
+../../headers/paulobetaX6.c(404): error C141: syntax error near '}', expected 'hdata'
+Target not created.
+Build Time Elapsed:  00:00:01

@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\Analog2digital.obj" 
+TO ".\Objects\Analog2Digital" 
+PRINT(".\Listings\Analog2Digital.m51") RAMSIZE(256) 

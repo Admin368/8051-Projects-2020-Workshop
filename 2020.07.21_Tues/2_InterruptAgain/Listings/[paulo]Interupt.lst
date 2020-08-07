@@ -1,0 +1,90 @@
+C51 COMPILER V9.60.0.0   _PAULO_INTERUPT                                                   07/27/2020 17:55:22 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE _PAULO_INTERUPT
+OBJECT MODULE PLACED IN .\Objects\[paulo]Interupt.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE [paulo]Interupt.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\[paulo]Interupt.lst) TABS(2) OBJECT(.\Objects\[paulo]Interupt.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          //#include "../../headers/paulobetaX6.c"
+   3          char count =0;
+   4          sbit buzzer = P0^7;
+   5          void timer0_init();
+   6          void timer0_pull();
+   7          void delay(char x);
+   8          void main(){
+   9   1        buzzer = 0;
+  10   1        timer0_init();
+  11   1        while(1){
+  12   2            timer0_pull();
+  13   2          }
+  14   1      }
+  15          
+  16          void timer0_init(){ //if we repeat this process 20 times its 1 sec
+  17   1        //SET THE TMODE REGISTER
+  18   1        TMOD = 0x01;
+  19   1        //INIT THE TIMER
+  20   1        TH0 = (65536-46082)/256;
+  21   1        TL0 = (65536-46082)%256;
+  22   1        //START TIMER
+  23   1        TR0=1;
+  24   1        //WEN EVER IT OVERFLOWS IT INCREMENTS COUNT
+  25   1      }
+  26          
+  27          void timer0_pull(){
+  28   1        while(TF0==0);
+  29   1        TF0 = 0; //reset overflow flag
+  30   1        count++;// increment count
+  31   1        if(count==20){
+  32   2              count=0;//timer 0 has counted up to 1 sec
+  33   2              buzzer=1;
+  34   2              delay(5);
+  35   2              buzzer=0;
+  36   2              //after this we need to reload timer0init with same value
+  37   2        }
+  38   1      }
+  39          
+  40          void delay(char x)// delay function
+  41          {
+  42   1        char y;
+  43   1        while(x--)
+  44   1          for(y =0; y<120; y++);
+  45   1      }
+  46          
+  47          void setup_interrupt(){//SETUP TIMER 0 INTERRUPT
+  48   1        EA = 1; //ALLOW ALL CPU INTERUPTS
+  49   1        ET0 = 1; //ENABLE TIMER 0 INTERRUPT
+  50   1        //MAKE SURE ITS ENABLED BEFORE INFITNE LOOP
+  51   1        //set EA AS 1 
+  52   1        //TIMER 0 ET0 TIMER 1
+  53   1        //TIMER 1 E
+  54   1      }
+C51 COMPILER V9.60.0.0   _PAULO_INTERUPT                                                   07/27/2020 17:55:22 PAGE 2   
+
+  55          
+  56          //after interrupt is done it goes back to what ever it was doing
+  57          void timer0_interrupt() interrupt 1{// interrupt service routine
+  58   1              count=0;//timer 0 has counted up to 1 sec
+  59   1              P1=0x00;
+  60   1              buzzer=1;
+  61   1              delay(5);
+  62   1              P1=0xff;
+  63   1              buzzer=0;
+  64   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    134    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

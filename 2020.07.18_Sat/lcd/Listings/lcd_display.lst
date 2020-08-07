@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.0.0   LCD_DISPLAY                                                       07/18/2020 16:05:51 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD_DISPLAY
+OBJECT MODULE PLACED IN .\Objects\lcd_display.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd_display.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\lcd_display.lst) TABS(2) OBJECT(.\Objects\lcd_display.obj)
+
+line level    source
+
+   1          #include<reg52.h>
+   2          
+   3          sbit rs = P2^3; // register select
+   4          sbit rw = P2^4; // read/write
+   5          sbit en = P2^5; // read/write enable
+   6          
+   7          void lcd_init(); // lcd initialization
+   8          void write_com(char com); //write command
+   9          void write_data(char _data); // write data
+  10          
+  11          void delay(char x);// delay function
+  12          void main()
+  13          {
+  14   1        lcd_init();
+  15   1        write_data('a');
+  16   1        while(1)
+  17   1        {}
+  18   1      }
+  19          
+  20          void lcd_init() // lcd initialization
+  21          {
+  22   1          // prepare the screen -16*2 5*7 matrix
+  23   1          write_com(0x38);
+  24   1          // turn on display
+  25   1          write_com(0x08);
+  26   1          // prepare cursor and data pointer
+  27   1          write_com(6);
+  28   1          // push curso to frist line
+  29   1          write_com(0x80);
+  30   1          // clear the screen
+  31   1          write_com(1);
+  32   1      }
+  33          void write_com(char com) //write command
+  34          {
+  35   1        rs = 0; rw =0; P0 = com;
+  36   1        en = 0;
+  37   1        delay(10);
+  38   1        en = 1;
+  39   1        delay(10);
+  40   1        en = 0;
+  41   1      }
+  42          void write_data(char _data) // write data
+  43          {
+  44   1        rs = 1;  rw = 0; P0 = _data;
+  45   1        en = 0;
+  46   1        delay(10);
+  47   1        en = 1;
+  48   1        delay(10);
+  49   1        en = 0;
+  50   1        
+  51   1      }
+  52          
+  53          void delay(char x)// delay function
+  54          {
+C51 COMPILER V9.60.0.0   LCD_DISPLAY                                                       07/18/2020 16:05:51 PAGE 2   
+
+  55   1        char y;
+  56   1        while(x--)
+  57   1          for(y =0; y<120; y++);
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    102    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,296 @@
+C51 COMPILER V9.60.0.0   PINGPONG68_V3                                                     07/27/2020 15:25:53 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PINGPONG68_V3
+OBJECT MODULE PLACED IN .\Objects\pingpong68_v3.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE pingpong68_v3.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\pingpong68_v3.lst) TABS(2) OBJECT(.\Objects\pingpong68_v3.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          //#include <string.h>
+   3          //#include <math.h>
+   4          #include <paulobetaX5.h>
+   5          #include <paulo8x8_v1.h>
+   6          #define uchar unsigned char
+   7          
+   8          uchar error=0; // if encounter error=1, if not =0;
+   9          sbit light0=P1^7;
+  10          sbit light1=P1^6;
+  11          sbit light2=P1^5;
+  12          sbit light3=P1^4;
+  13          sbit light4=P1^3;
+  14          sbit light5=P1^2;
+  15          sbit light6=P1^1;
+  16          sbit light7=P1^0;
+  17          
+  18          uchar xx; // for forloops
+  19          uchar cycle;    //game cycle    , 1cycle    = 10clock
+  20          uchar clock;      //game clock    , 1clock    = 100milli_clock;
+  21          uchar milliclock=0; //game milliclock   , 1milliclock   = 100micro_clock;
+  22          uchar microclock=0; //game microclock ,
+  23          
+  24          //splitter
+  25          xdata uchar xsplit[4];
+  26          
+  27          //flags
+  28          uchar flag = 1;
+  29          uchar xflag=1;
+  30          uchar xflag0=1;
+  31          uchar xflag1=1;
+  32          uchar xflag2=1;
+  33          uchar xflag3=1;
+  34          // used to know change
+  35          uchar oldcycle;
+  36          uchar oldclock;
+  37          uchar oldmilliclock;
+  38          uchar oldmicroclock;
+  39          
+  40          //timer
+  41          uchar timer;
+  42          uchar oldtimer;
+  43          uchar usetimer;
+  44          
+  45          uchar row2draw;// row to draw on
+  46          uchar col2draw;// column to draw on
+  47          
+  48          uchar increment=8;//value pushing ball
+  49          uchar ball_location=12;// ranges btween [B9 - B49 
+  50          uchar old_ball_location;
+  51          uchar bottomracket_location; // 6 locations [B1-B6]
+  52          uchar topracket_location; // 6 locations [B57-B62]
+  53          
+  54          void debuglights();
+C51 COMPILER V9.60.0.0   PINGPONG68_V3                                                     07/27/2020 15:25:53 PAGE 2   
+
+  55          void psplit(uchar splitinput); // split input into 3 for display on 7seg
+  56          //void showtimer();// shows timer on 7seg
+  57          void Xclock(); //increment the clock
+  58          void resetXclock();//resets clock
+  59          void resetXtimer(); //resets timer
+  60          void startXtimer(); //resets and starts timer
+  61          void RunXtimer(); //increments timer if usetimer=1;
+  62          void stopXtimer(); //stops and resets timer
+  63          
+  64          uchar timerchanged();       //check if 1 clock counted 1once
+  65          uchar timercounted(uchar ctime);//
+  66          void update_ball();//auto moves ball +/- 1row
+  67          void move_ball(); //gets input to move ball
+  68          void move_bottomracket(); // gets input to move bottom racket
+  69          void move_topracket(); //get input to move top racket
+  70          void draw(uchar box); // function used to move elements between [B1-B64]
+  71          void clear_array();
+  72          void error_crash();
+  73          void error_checker();//avoid bricking my game
+  74          void change_incrememt();
+  75          
+  76          
+  77          void main(){
+  78   1        uchar triger = 1;
+  79   1        xx=0;
+  80   1        resetXclock();
+  81   1        while(1){
+  82   2          Xclock();
+  83   2          if(triger==1){
+  84   3            startXtimer();
+  85   3            timer=1;
+  86   3            triger=0;
+  87   3          }
+  88   2          //showtimer();
+  89   2          clear_array();
+  90   2          //move_bottomracket();
+  91   2          //move_ball();
+  92   2          update_ball();
+  93   2          //move_topracket();
+  94   2          disp_col();
+  95   2          error_checker();
+  96   2        }
+  97   1        error_crash();
+  98   1      }
+  99          void update_ball(){
+ 100   1        old_ball_location=ball_location;
+ 101   1        //ball_location=ball_location+increment;
+ 102   1        //xx++;
+ 103   1        //if(xx>=56){xx=0;}
+ 104   1        //if(timer%10==0){ball_location=ball_location+increment;}
+ 105   1        if(milliclock%2==0){ball_location=ball_location+increment;}
+ 106   1        if(ball_location<9){
+ 107   2          ball_location=old_ball_location;
+ 108   2          increment=-(increment);
+ 109   2          ball_location=ball_location+increment;
+ 110   2          }
+ 111   1        if(ball_location>56){
+ 112   2          ball_location=old_ball_location;
+ 113   2          increment= -(increment);
+ 114   2          ball_location=ball_location+increment;
+ 115   2          }
+ 116   1        draw(ball_location);
+C51 COMPILER V9.60.0.0   PINGPONG68_V3                                                     07/27/2020 15:25:53 PAGE 3   
+
+ 117   1        //draw(xx);
+ 118   1      }
+ 119          void change_incrememt(uchar change){
+ 120   1        increment=change;
+ 121   1        if(increment<=0){increment=1;}
+ 122   1        if(increment>8){increment=8;}
+ 123   1      }
+ 124          
+ 125          void error_checker(){
+ 126   1        if(increment<=0&&increment>8){error=2;return;}//Error2 increment out of bound
+ 127   1        if(ball_location<9&&ball_location>56){error=3;return;}//Error3 ball out of bound
+ 128   1      }
+ 129          
+ 130          void clear_array(){
+ 131   1        uchar ar,ac;
+ 132   1        for(ar=0;ar<8;ar++){
+ 133   2          for(ac=0;ac<8;ac++){
+ 134   3            map[ar][ac]=0;
+ 135   3          }
+ 136   2        }
+ 137   1      }
+ 138          void error_crash(){
+ 139   1        clear_array();
+ 140   1        //draw 'e'
+ 141   1        draw(36);draw(35);draw(34);
+ 142   1        draw(28);draw(26);draw(20);
+ 143   1        draw(19);draw(18);draw(10);
+ 144   1        draw(4);draw(3);draw(2);
+ 145   1        //draw 'r'
+ 146   1      
+ 147   1        draw(32);draw(31);draw(30);
+ 148   1        draw(22);draw(14);draw(6);
+ 149   1        for(xx=56;xx<(56+error);xx++){
+ 150   2          draw(xx);
+ 151   2        }
+ 152   1        while(1){
+ 153   2          disp_col();
+ 154   2        }
+ 155   1      }
+ 156          void draw(uchar box){
+ 157   1      if(box<=0){error=1;return;}
+ 158   1      if(box>64){error=1;return;}
+ 159   1      if(box>0&&box<=8){col2draw=1;}
+ 160   1      if(box>8&&box<=16){col2draw=2;}
+ 161   1      if(box>16&&box<=24){col2draw=3;}
+ 162   1      if(box>24&&box<=32){col2draw=4;}
+ 163   1      if(box>32&&box<=40){col2draw=5;}
+ 164   1      if(box>40&&box<=48){col2draw=6;}
+ 165   1      if(box>48&&box<=56){col2draw=7;}
+ 166   1      if(box>56&&box<=64){col2draw=8;}
+ 167   1        row2draw=box-(8*(col2draw-1));
+ 168   1        map[row2draw-1][col2draw-1]=1;
+ 169   1      }
+ 170          
+ 171          /*
+ 172          void showtimer(){
+ 173            psplit(microclock);
+ 174            xsegment(6);
+ 175            xdisplay(xsplit[2]);
+ 176            xsegment(5);
+ 177            xdisplay(xsplit[1]);
+ 178            xsegment(4);
+C51 COMPILER V9.60.0.0   PINGPONG68_V3                                                     07/27/2020 15:25:53 PAGE 4   
+
+ 179            xdisplay(xsplit[0]);
+ 180          
+ 181            psplit(milliclock);
+ 182            xsegment(3);
+ 183            xdisplay(xsplit[2]);
+ 184            xsegment(2);
+ 185            xdisplay(xsplit[1]);
+ 186            xsegment(1);
+ 187            xdisplay(xsplit[0]);
+ 188          }
+ 189          */
+ 190          void psplit(uchar splitinput){
+ 191   1        xsplit[0]=splitinput/100;
+ 192   1        xsplit[1]=(splitinput%100)/10;
+ 193   1        xsplit[2]=(splitinput%100)%10;
+ 194   1      }
+ 195          void resetXtimer(){
+ 196   1       timer=0;
+ 197   1       oldtimer=0;
+ 198   1      }
+ 199          void startXtimer(){
+ 200   1        resetXtimer();
+ 201   1        usetimer=1;
+ 202   1      }
+ 203          void RunXtimer(){
+ 204   1        if(usetimer==1){
+ 205   2          if(oldclock!=clock){
+ 206   3            oldtimer=timer;
+ 207   3            timer++;
+ 208   3            if(timer==254){timer=0;}
+ 209   3          }
+ 210   2        }
+ 211   1      }
+ 212          void stopXtimer(){
+ 213   1        usetimer=0;
+ 214   1        resetXtimer();
+ 215   1      }
+ 216          
+ 217          uchar timerchanged(){
+ 218   1        if(timer!=oldtimer){return 1;}
+ 219   1        else if(timer==oldtimer){return 0;}
+ 220   1      }
+ 221          
+ 222          uchar timercounted(uchar ctime){
+ 223   1        if(ctime-timer==0){return 1;}
+ 224   1        else if(ctime-timer!=0){return 0;}
+ 225   1      }
+ 226          
+ 227          void Xclock(){
+ 228   1      microclock++;
+ 229   1      if(microclock==100){microclock=0;oldmilliclock=milliclock;milliclock++;}
+ 230   1      if(milliclock==100){milliclock=0;oldclock=clock;clock++;}
+ 231   1      if(clock==10){clock=0;oldcycle=cycle;cycle++;}
+ 232   1      if(cycle==254){cycle=0;}
+ 233   1      //if(cycle==254){resetXclock();}
+ 234   1      //debuglights();
+ 235   1      //RunXtimer();
+ 236   1      }
+ 237          
+ 238          void debuglights(){
+ 239   1      if(milliclock!=oldmilliclock){
+ 240   2        xflag3 = ~xflag3;
+C51 COMPILER V9.60.0.0   PINGPONG68_V3                                                     07/27/2020 15:25:53 PAGE 5   
+
+ 241   2      }
+ 242   1      if(xflag3 == flag){light3=1;}
+ 243   1      else if(xflag3 == ~flag){light3=0;}
+ 244   1      
+ 245   1      if(microclock!=oldmicroclock){xflag2 = ~xflag2;if(xflag2 == flag){light2=1;}else if(xflag2 == ~flag){light
+             -2=0;}}
+ 246   1      if(clock!=oldclock){xflag1 = ~xflag1;if(xflag1 == flag){light1=1;}else if(xflag1 == ~flag){light1=0;}}
+ 247   1      if(cycle!=oldcycle){xflag0 = ~xflag0;if(xflag0 == flag){light0=1;}else if(xflag0 == ~flag){light0=0;};xbee
+             -p();}
+ 248   1      
+ 249   1      }
+ 250          void resetXclock(){
+ 251   1        microclock=0;
+ 252   1        milliclock=0;
+ 253   1        clock=0;
+ 254   1        cycle=0;
+ 255   1        oldmicroclock=0;
+ 256   1        oldmilliclock=0;
+ 257   1        oldclock=0;
+ 258   1        oldcycle=0;
+ 259   1      }
+*** WARNING C294 IN LINE 97 OF pingpong68_v3.c: unreachable code
+*** WARNING C291 IN LINE 220 OF pingpong68_v3.c: not every exit path returns a value
+*** WARNING C291 IN LINE 225 OF pingpong68_v3.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1874    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     68    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     49       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)
