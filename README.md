@@ -1,2 +1,2 @@
 # 8051-Projects-2020-Workshop
- 8051 projects to start and learn 8051 microcontroler development
+ 8051 projects to start and learn 8051 MicroController development
