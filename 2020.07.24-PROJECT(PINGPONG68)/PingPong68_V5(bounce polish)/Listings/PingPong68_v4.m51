@@ -1,0 +1,921 @@
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                    08/12/2020  05:55:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\pingpong68_v5.obj TO .\Objects\PingPong68_v4 PRINT (.\Listi
+>> ngs\PingPong68_v4.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\pingpong68_v5.obj (PINGPONG68_V5)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FCAST)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CASTF)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (POW)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?CHKFLOAT)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPADD)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPCMP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPNEG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (EXP)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (LOG)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPDIV)
+  C:\KEIL_V5\C51\LIB\C51FPS.LIB (?C?FPSERIES)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SIDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LNEG)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?LLDCODE0)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CCASE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\PingPong68_v4 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000AH     UNIT         ?DT?_POW?POW
+            DATA    0012H     0004H     UNIT         ?DT?LOG?LOG
+            DATA    0016H     0002H     UNIT         ?DT?_XSECONDS?PINGPONG68_V5
+            DATA    0018H     0001H     UNIT         _DATA_GROUP_
+                    0019H     0007H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?LOG?LOG
+                    0020H.1   0000H.7                *** GAP ***
+            DATA    0021H     002BH     UNIT         ?DT?PINGPONG68_V5
+            IDATA   004CH     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0040H     UNIT         ?XD?PINGPONG68_V5
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0008H     UNIT         ?PR?XGETFULLKEY?PINGPONG68_V5
+            CODE    000BH     0003H     ABSOLUTE     
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 2
+
+
+            CODE    000EH     052DH     UNIT         ?C?LIB_CODE
+            CODE    053BH     0135H     UNIT         ?PR?LOG?LOG
+            CODE    0670H     0117H     UNIT         ?PR?_POW?POW
+            CODE    0787H     010FH     UNIT         ?PR?_DRAW?PINGPONG68_V5
+            CODE    0896H     00EBH     UNIT         ?PR?ERROR_CRASH?PINGPONG68_V5
+            CODE    0981H     00E5H     UNIT         ?PR?BOUNCE_BALL?PINGPONG68_V5
+            CODE    0A66H     009CH     UNIT         ?PR?GETINPUT?PINGPONG68_V5
+            CODE    0B02H     009AH     UNIT         ?PR?EXP?EXP
+            CODE    0B9CH     0098H     UNIT         ?PR?UPDATE_BALL?PINGPONG68_V5
+            CODE    0C34H     0094H     UNIT         ?PR?DISP_COL?PINGPONG68_V5
+            CODE    0CC8H     0093H     UNIT         ?PR?_XTRANSLATEKEY?PINGPONG68_V5
+            CODE    0D5BH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0DE7H     0084H     UNIT         ?PR?GET_BIN?PINGPONG68_V5
+            CODE    0E6BH     007EH     UNIT         ?PR?XCLOCK_INTERUPT?PINGPONG68_V5
+            CODE    0EE9H     0073H     UNIT         ?PR?_XLED?PINGPONG68_V5
+            CODE    0F5CH     0069H     UNIT         ?C_INITSEG
+            CODE    0FC5H     0053H     UNIT         ?PR?UPDATE_BOTTOMRACKET?PINGPONG68_V5
+            CODE    1018H     0052H     UNIT         ?PR?_XCOL?PINGPONG68_V5
+            CODE    106AH     0052H     UNIT         ?PR?ERROR_CHECKER?PINGPONG68_V5
+            CODE    10BCH     0051H     UNIT         ?PR?_XROW?PINGPONG68_V5
+            CODE    110DH     0039H     UNIT         ?PR?CLEAR_ARRAY?PINGPONG68_V5
+            CODE    1146H     0036H     UNIT         ?PR?XCLOCK_RESET?PINGPONG68_V5
+            CODE    117CH     0034H     UNIT         ?PR?_GET_COL?PINGPONG68_V5
+            CODE    11B0H     0026H     UNIT         ?PR?XGETKEY?PINGPONG68_V5
+            CODE    11D6H     0022H     UNIT         ?PR?_XSECONDS?PINGPONG68_V5
+            CODE    11F8H     001EH     UNIT         ?PR?_CHANGE_INCREMEMT?PINGPONG68_V5
+            CODE    1216H     001CH     UNIT         ?PR?_XDELAY?PINGPONG68_V5
+            CODE    1232H     001BH     UNIT         ?PR?MAIN?PINGPONG68_V5
+            CODE    124DH     001BH     UNIT         ?PR?UPDATE_TOPRACKET?PINGPONG68_V5
+            CODE    1268H     0012H     UNIT         ?PR?XCLOCK_SETUP?PINGPONG68_V5
+            CODE    127AH     0010H     UNIT         ?PR?XCLOCK_INIT?PINGPONG68_V5
+            CODE    128AH     000FH     UNIT         ?PR?XDELAYMS?PINGPONG68_V5
+            CODE    1299H     000BH     UNIT         ?PR?UPDATEASSETS?PINGPONG68_V5
+            CODE    12A4H     000AH     UNIT         ?PR?XBEEP?PINGPONG68_V5
+            CODE    12AEH     0008H     UNIT         ?PR?XRESETKEY?PINGPONG68_V5
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\PingPong68_v4 (?C_STARTUP)
+
+
+SEGMENT                                         DATA_GROUP 
+  +--> CALLED SEGMENT                         START    LENGTH
+-------------------------------------------------------------
+?C_C51STARTUP                                 -----    -----
+  +--> ?PR?MAIN?PINGPONG68_V5
+  +--> ?C_INITSEG
+
+?PR?MAIN?PINGPONG68_V5                        -----    -----
+  +--> ?PR?XCLOCK_INIT?PINGPONG68_V5
+  +--> ?PR?GETINPUT?PINGPONG68_V5
+  +--> ?PR?CLEAR_ARRAY?PINGPONG68_V5
+  +--> ?PR?UPDATEASSETS?PINGPONG68_V5
+  +--> ?PR?DISP_COL?PINGPONG68_V5
+  +--> ?PR?ERROR_CHECKER?PINGPONG68_V5
+  +--> ?PR?ERROR_CRASH?PINGPONG68_V5
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 3
+
+
+?PR?XCLOCK_INIT?PINGPONG68_V5                 -----    -----
+  +--> ?PR?XCLOCK_SETUP?PINGPONG68_V5
+  +--> ?PR?XCLOCK_RESET?PINGPONG68_V5
+
+?PR?GETINPUT?PINGPONG68_V5                    -----    -----
+  +--> ?PR?CLEAR_ARRAY?PINGPONG68_V5
+  +--> ?PR?UPDATEASSETS?PINGPONG68_V5
+  +--> ?PR?DISP_COL?PINGPONG68_V5
+
+?PR?UPDATEASSETS?PINGPONG68_V5                -----    -----
+  +--> ?PR?UPDATE_BOTTOMRACKET?PINGPONG68_V5
+  +--> ?PR?_DRAW?PINGPONG68_V5
+  +--> ?PR?UPDATE_TOPRACKET?PINGPONG68_V5
+
+?PR?UPDATE_BOTTOMRACKET?PINGPONG68_V5         0018H    0001H
+  +--> ?PR?_DRAW?PINGPONG68_V5
+
+?PR?UPDATE_TOPRACKET?PINGPONG68_V5            -----    -----
+  +--> ?PR?_DRAW?PINGPONG68_V5
+
+?PR?DISP_COL?PINGPONG68_V5                    -----    -----
+  +--> ?PR?_XCOL?PINGPONG68_V5
+
+?PR?ERROR_CRASH?PINGPONG68_V5                 -----    -----
+  +--> ?PR?CLEAR_ARRAY?PINGPONG68_V5
+  +--> ?PR?_DRAW?PINGPONG68_V5
+  +--> ?PR?_XLED?PINGPONG68_V5
+  +--> ?PR?DISP_COL?PINGPONG68_V5
+
+*** NEW ROOT ***************************************************
+
+?PR?XCLOCK_INTERUPT?PINGPONG68_V5             -----    -----
+  +--> ?PR?XCLOCK_RESET?PINGPONG68_V5
+  +--> ?PR?UPDATE_BALL?PINGPONG68_V5
+
+?PR?UPDATE_BALL?PINGPONG68_V5                 -----    -----
+  +--> ?PR?BOUNCE_BALL?PINGPONG68_V5
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\PingPong68_v4 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0D5BH         SEGMENT       ?C_C51STARTUP
+  I:004CH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0D5EH         SYMBOL        IDATALOOP
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 4
+
+
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0D5BH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0D5BH         LINE#         133
+  C:0D5DH         LINE#         134
+  C:0D5EH         LINE#         135
+  C:0D5FH         LINE#         136
+  C:0D61H         LINE#         185
+  C:0D64H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        PINGPONG68_V5
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:127AH         PUBLIC        Xclock_init
+  B:00B0H.7       PUBLIC        key4
+  C:0FC5H         PUBLIC        update_bottomracket
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0B9CH         PUBLIC        update_ball
+  C:11B0H         PUBLIC        xgetkey
+  B:00A8H.7       PUBLIC        EA
+  D:0021H         PUBLIC        Xclock_old
+  B:0080H.0       PUBLIC        row0
+  B:0080H.1       PUBLIC        row1
+  C:1216H         PUBLIC        _xdelay
+  B:0080H.2       PUBLIC        row2
+  C:110DH         PUBLIC        clear_array
+  B:0080H.3       PUBLIC        row3
+  D:0022H         PUBLIC        xletter
+  D:0023H         PUBLIC        xprekey
+  B:0080H.4       PUBLIC        row4
+  D:00A8H         PUBLIC        IE
+  B:0080H.5       PUBLIC        row5
+  B:0080H.6       PUBLIC        row6
+  D:0024H         PUBLIC        xnewkey
+  B:0080H.7       PUBLIC        row7
+  D:0025H         PUBLIC        topracket_location
+  C:11F8H         PUBLIC        _change_incrememt
+  D:0026H         PUBLIC        xflag
+  C:12A4H         PUBLIC        xbeep
+  C:0CC8H         PUBLIC        _xtranslatekey
+  D:00B8H         PUBLIC        IP
+  D:0027H         PUBLIC        flag
+  C:1299H         PUBLIC        updateassets
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 5
+
+
+  B:00A0H.0       PUBLIC        xbuzzer
+  D:0028H         PUBLIC        value
+  C:0896H         PUBLIC        error_crash
+  D:0029H         PUBLIC        col2draw
+  C:1232H         PUBLIC        main
+  D:002AH         PUBLIC        error
+  C:0EE9H         PUBLIC        _xled
+  C:0787H         PUBLIC        _draw
+  D:002BH         PUBLIC        Xclock_divider
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:002CH         PUBLIC        highspeed
+  C:1018H         PUBLIC        _xcol
+  D:002DH         PUBLIC        bin
+  C:124DH         PUBLIC        update_topracket
+  C:0003H         PUBLIC        xgetfullkey
+  D:002EH         PUBLIC        row2draw
+  X:0000H         PUBLIC        map
+  D:002FH         PUBLIC        col
+  D:0030H         PUBLIC        xdc
+  D:0031H         PUBLIC        xdigdelay
+  D:0032H         PUBLIC        xkey
+  C:0E6BH         PUBLIC        Xclock_interupt
+  B:00A8H.1       PUBLIC        ET0
+  D:0033H         PUBLIC        increment
+  D:0034H         PUBLIC        xeffector
+  D:0035H         PUBLIC        xsegdelay
+  D:008CH         PUBLIC        TH0
+  D:0036H         PUBLIC        autospeed
+  D:008AH         PUBLIC        TL0
+  C:0C34H         PUBLIC        disp_col
+  C:10BCH         PUBLIC        _xrow
+  B:0088H.4       PUBLIC        TR0
+  D:0037H         PUBLIC        bottomracket_location
+  D:0038H         PUBLIC        row
+  D:0039H         PUBLIC        bin_col
+  D:0042H         PUBLIC        ixx
+  D:0043H         PUBLIC        ball_location
+  C:0DE7H         PUBLIC        get_bin
+  C:117CH         PUBLIC        _get_col
+  C:106AH         PUBLIC        error_checker
+  D:0044H         PUBLIC        Xclock
+  D:00C8H         PUBLIC        T2CON
+  D:0045H         PUBLIC        XgameSpeed
+  C:12AEH         PUBLIC        xresetkey
+  C:128AH         PUBLIC        xdelayms
+  C:11D6H         PUBLIC        _xseconds
+  C:1146H         PUBLIC        Xclock_reset
+  D:0046H         PUBLIC        xx
+  D:0047H         PUBLIC        tempbin
+  C:0A66H         PUBLIC        getinput
+  D:0048H         PUBLIC        forward
+  D:0049H         PUBLIC        Xclock_Value1
+  D:004AH         PUBLIC        Xclock_Value2
+  D:00D0H         PUBLIC        PSW
+  B:00B0H.4       PUBLIC        key1
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 6
+
+
+  C:1268H         PUBLIC        Xclock_setup
+  B:00B0H.5       PUBLIC        key2
+  C:0981H         PUBLIC        bounce_ball
+  D:004BH         PUBLIC        old_ball_location
+  B:00B0H.6       PUBLIC        key3
+  -------         PROC          XBEEP
+  C:12A4H         LINE#         75
+  C:12A4H         LINE#         76
+  C:12A6H         LINE#         77
+  C:12ABH         LINE#         78
+  C:12ADH         LINE#         79
+  -------         ENDPROC       XBEEP
+  -------         PROC          _XSECONDS
+  D:0016H         SYMBOL        mm
+  -------         DO            
+  D:0017H         SYMBOL        mmm
+  -------         ENDDO         
+  C:11D6H         LINE#         80
+  C:11D8H         LINE#         82
+  C:11F0H         LINE#         83
+  C:11F0H         LINE#         84
+  C:11F3H         LINE#         85
+  C:11F7H         LINE#         86
+  -------         ENDPROC       _XSECONDS
+  -------         PROC          XDELAYMS
+  -------         DO            
+  D:0007H         SYMBOL        ii
+  D:0006H         SYMBOL        jj
+  D:0005H         SYMBOL        kk
+  -------         ENDDO         
+  C:128AH         LINE#         87
+  C:128AH         LINE#         89
+  C:128BH         LINE#         90
+  C:128CH         LINE#         91
+  C:128EH         LINE#         92
+  C:1290H         LINE#         93
+  C:1292H         LINE#         95
+  C:1292H         LINE#         97
+  C:1292H         LINE#         98
+  C:1294H         LINE#         99
+  C:1296H         LINE#         100
+  C:1298H         LINE#         101
+  -------         ENDPROC       XDELAYMS
+  -------         PROC          _XDELAY
+  D:0007H         SYMBOL        xx
+  -------         DO            
+  D:0006H         SYMBOL        xz
+  D:0005H         SYMBOL        zx
+  -------         ENDDO         
+  C:1216H         LINE#         103
+  C:1216H         LINE#         105
+  C:121DH         LINE#         106
+  C:122CH         LINE#         107
+  C:122FH         LINE#         108
+  C:1231H         LINE#         109
+  -------         ENDPROC       _XDELAY
+  -------         PROC          _XLED
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 7
+
+
+  D:0007H         SYMBOL        ld
+  C:0EE9H         LINE#         110
+  C:0EE9H         LINE#         111
+  C:0EF4H         LINE#         112
+  C:0EFDH         LINE#         113
+  C:0F06H         LINE#         114
+  C:0F0FH         LINE#         115
+  C:0F18H         LINE#         116
+  C:0F21H         LINE#         117
+  C:0F2AH         LINE#         118
+  C:0F33H         LINE#         119
+  C:0F3AH         LINE#         120
+  C:0F41H         LINE#         121
+  C:0F49H         LINE#         122
+  C:0F52H         LINE#         123
+  C:0F5BH         LINE#         124
+  -------         ENDPROC       _XLED
+  -------         PROC          XGETFULLKEY
+  C:0003H         LINE#         206
+  C:0003H         LINE#         207
+  C:0006H         LINE#         208
+  -------         ENDPROC       XGETFULLKEY
+  -------         PROC          XGETKEY
+  -------         DO            
+  D:0007H         SYMBOL        colvalue
+  D:0006H         SYMBOL        rowvalue
+  -------         ENDDO         
+  C:11B0H         LINE#         210
+  C:11B0H         LINE#         212
+  C:11B3H         LINE#         213
+  C:11BAH         LINE#         214
+  C:11BFH         LINE#         215
+  C:11C6H         LINE#         216
+  C:11CBH         LINE#         217
+  C:11CEH         LINE#         218
+  C:11D2H         LINE#         219
+  C:11D5H         LINE#         220
+  C:11D5H         LINE#         221
+  C:11D5H         LINE#         222
+  -------         ENDPROC       XGETKEY
+  -------         PROC          _XTRANSLATEKEY
+  D:0007H         SYMBOL        xprekey
+  C:0CC8H         LINE#         223
+  C:0CC8H         LINE#         226
+  C:0D00H         LINE#         227
+  C:0D00H         LINE#         228
+  C:0D03H         LINE#         229
+  C:0D03H         LINE#         230
+  C:0D05H         LINE#         231
+  C:0D05H         LINE#         232
+  C:0D08H         LINE#         233
+  C:0D08H         LINE#         234
+  C:0D0AH         LINE#         235
+  C:0D0AH         LINE#         236
+  C:0D0DH         LINE#         237
+  C:0D0DH         LINE#         238
+  C:0D0FH         LINE#         239
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 8
+
+
+  C:0D0FH         LINE#         240
+  C:0D12H         LINE#         241
+  C:0D12H         LINE#         242
+  C:0D14H         LINE#         243
+  C:0D14H         LINE#         244
+  C:0D17H         LINE#         245
+  C:0D17H         LINE#         246
+  C:0D19H         LINE#         247
+  C:0D19H         LINE#         248
+  C:0D1CH         LINE#         249
+  C:0D1CH         LINE#         250
+  C:0D1EH         LINE#         251
+  C:0D1EH         LINE#         252
+  C:0D21H         LINE#         253
+  C:0D21H         LINE#         254
+  C:0D23H         LINE#         255
+  C:0D23H         LINE#         256
+  C:0D26H         LINE#         257
+  C:0D26H         LINE#         258
+  C:0D28H         LINE#         259
+  C:0D28H         LINE#         260
+  C:0D2BH         LINE#         261
+  C:0D2BH         LINE#         262
+  C:0D2DH         LINE#         263
+  C:0D2DH         LINE#         264
+  C:0D30H         LINE#         265
+  C:0D30H         LINE#         266
+  C:0D32H         LINE#         267
+  C:0D32H         LINE#         268
+  C:0D35H         LINE#         269
+  C:0D35H         LINE#         270
+  C:0D37H         LINE#         271
+  C:0D37H         LINE#         272
+  C:0D3AH         LINE#         273
+  C:0D3AH         LINE#         274
+  C:0D3CH         LINE#         275
+  C:0D3CH         LINE#         276
+  C:0D3FH         LINE#         277
+  C:0D3FH         LINE#         278
+  C:0D41H         LINE#         279
+  C:0D41H         LINE#         280
+  C:0D44H         LINE#         281
+  C:0D44H         LINE#         282
+  C:0D46H         LINE#         283
+  C:0D46H         LINE#         284
+  C:0D49H         LINE#         285
+  C:0D49H         LINE#         286
+  C:0D4BH         LINE#         287
+  C:0D4BH         LINE#         288
+  C:0D4EH         LINE#         289
+  C:0D51H         LINE#         290
+  C:0D53H         LINE#         291
+  C:0D53H         LINE#         292
+  C:0D56H         LINE#         293
+  C:0D58H         LINE#         294
+  C:0D58H         LINE#         295
+  C:0D58H         LINE#         296
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 9
+
+
+  C:0D5AH         LINE#         297
+  -------         ENDPROC       _XTRANSLATEKEY
+  -------         PROC          XRESETKEY
+  C:12AEH         LINE#         325
+  C:12AEH         LINE#         326
+  C:12B1H         LINE#         327
+  C:12B3H         LINE#         328
+  C:12B5H         LINE#         331
+  -------         ENDPROC       XRESETKEY
+  -------         PROC          GET_BIN
+  C:0DE7H         LINE#         38
+  C:0DE7H         LINE#         39
+  C:0DEAH         LINE#         41
+  C:0DF7H         LINE#         42
+  C:0DFAH         LINE#         43
+  C:0E04H         LINE#         44
+  C:0E55H         LINE#         45
+  C:0E5BH         LINE#         46
+  C:0E5FH         LINE#         47
+  C:0E66H         LINE#         48
+  C:0E6AH         LINE#         50
+  -------         ENDPROC       GET_BIN
+  -------         PROC          _GET_COL
+  D:0007H         SYMBOL        xcol
+  C:117CH         LINE#         52
+  C:117CH         LINE#         53
+  C:1186H         LINE#         54
+  C:11ABH         LINE#         55
+  C:11AFH         LINE#         56
+  -------         ENDPROC       _GET_COL
+  -------         PROC          _XROW
+  D:0007H         SYMBOL        rr
+  C:10BCH         LINE#         58
+  C:10BCH         LINE#         59
+  C:10C4H         LINE#         60
+  C:10CDH         LINE#         61
+  C:10D6H         LINE#         62
+  C:10DFH         LINE#         63
+  C:10E8H         LINE#         64
+  C:10F1H         LINE#         65
+  C:10FAH         LINE#         66
+  C:1103H         LINE#         67
+  C:110CH         LINE#         68
+  -------         ENDPROC       _XROW
+  -------         PROC          _XCOL
+  D:0007H         SYMBOL        xcc
+  C:1018H         LINE#         70
+  C:1018H         LINE#         83
+  C:1023H         LINE#         84
+  C:102AH         LINE#         85
+  C:1033H         LINE#         86
+  C:103CH         LINE#         87
+  C:1045H         LINE#         88
+  C:104EH         LINE#         89
+  C:1057H         LINE#         90
+  C:1060H         LINE#         91
+  C:1069H         LINE#         92
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 10
+
+
+  -------         ENDPROC       _XCOL
+  -------         PROC          DISP_COL
+  C:0C34H         LINE#         109
+  C:0C34H         LINE#         111
+  C:0C45H         LINE#         114
+  C:0C53H         LINE#         115
+  C:0C76H         LINE#         116
+  C:0C7AH         LINE#         117
+  C:0C7DH         LINE#         118
+  C:0C82H         LINE#         119
+  C:0C8AH         LINE#         120
+  C:0C92H         LINE#         121
+  C:0C9AH         LINE#         122
+  C:0CA2H         LINE#         123
+  C:0CAAH         LINE#         124
+  C:0CB2H         LINE#         125
+  C:0CBAH         LINE#         126
+  C:0CC2H         LINE#         130
+  C:0CC7H         LINE#         131
+  -------         ENDPROC       DISP_COL
+  -------         PROC          XCLOCK_SETUP
+  C:1268H         LINE#         58
+  C:1268H         LINE#         61
+  C:126BH         LINE#         62
+  C:126EH         LINE#         63
+  C:1271H         LINE#         64
+  C:1274H         LINE#         65
+  C:1276H         LINE#         66
+  C:1279H         LINE#         67
+  -------         ENDPROC       XCLOCK_SETUP
+  -------         PROC          GETINPUT
+  C:0A66H         LINE#         69
+  C:0A66H         LINE#         71
+  C:0A69H         LINE#         72
+  C:0A6BH         LINE#         73
+  C:0A79H         LINE#         74
+  C:0A87H         LINE#         76
+  C:0A87H         LINE#         77
+  C:0A8AH         LINE#         78
+  C:0A8CH         LINE#         79
+  C:0A9AH         LINE#         80
+  C:0AA8H         LINE#         82
+  C:0AA8H         LINE#         83
+  C:0AABH         LINE#         84
+  C:0AADH         LINE#         85
+  C:0ABBH         LINE#         86
+  C:0AC9H         LINE#         87
+  C:0AC9H         LINE#         88
+  C:0ACCH         LINE#         89
+  C:0ACEH         LINE#         90
+  C:0ADCH         LINE#         91
+  C:0AEAH         LINE#         92
+  C:0AEAH         LINE#         94
+  C:0AF6H         LINE#         95
+  C:0AF9H         LINE#         96
+  C:0AFCH         LINE#         97
+  C:0AFFH         LINE#         98
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 11
+
+
+  C:0B01H         LINE#         100
+  -------         ENDPROC       GETINPUT
+  -------         PROC          MAIN
+  C:1232H         LINE#         101
+  C:1232H         LINE#         102
+  C:1235H         LINE#         103
+  C:1239H         LINE#         104
+  C:123CH         LINE#         105
+  C:123FH         LINE#         106
+  C:1242H         LINE#         108
+  C:1245H         LINE#         109
+  C:1248H         LINE#         110
+  C:124AH         LINE#         111
+  -------         ENDPROC       MAIN
+  -------         PROC          UPDATE_BOTTOMRACKET
+  -------         DO            
+  D:0018H         SYMBOL        limit
+  -------         ENDDO         
+  C:0FC5H         LINE#         114
+  C:0FC5H         LINE#         115
+  C:0FC8H         LINE#         116
+  C:0FCCH         LINE#         117
+  C:0FD5H         LINE#         119
+  C:0FD5H         LINE#         120
+  C:0FDFH         LINE#         121
+  C:0FE3H         LINE#         123
+  C:0FE3H         LINE#         124
+  C:0FE9H         LINE#         125
+  C:0FF2H         LINE#         127
+  C:0FF2H         LINE#         128
+  C:0FF8H         LINE#         129
+  C:0FFDH         LINE#         131
+  C:0FFDH         LINE#         132
+  C:100BH         LINE#         133
+  C:1013H         LINE#         134
+  C:1017H         LINE#         135
+  -------         ENDPROC       UPDATE_BOTTOMRACKET
+  -------         PROC          UPDATE_TOPRACKET
+  C:124DH         LINE#         136
+  C:124DH         LINE#         137
+  C:125BH         LINE#         138
+  C:1263H         LINE#         139
+  C:1267H         LINE#         140
+  -------         ENDPROC       UPDATE_TOPRACKET
+  -------         PROC          UPDATEASSETS
+  C:1299H         LINE#         142
+  C:1299H         LINE#         143
+  C:129CH         LINE#         144
+  C:12A1H         LINE#         145
+  -------         ENDPROC       UPDATEASSETS
+  -------         PROC          UPDATE_BALL
+  C:0B9CH         LINE#         148
+  C:0B9CH         LINE#         150
+  C:0B9FH         LINE#         152
+  C:0BA2H         LINE#         159
+  C:0BCDH         LINE#         160
+  C:0BD0H         LINE#         161
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 12
+
+
+  C:0BD6H         LINE#         162
+  C:0BD9H         LINE#         163
+  C:0BDBH         LINE#         166
+  C:0BDBH         LINE#         168
+  C:0C03H         LINE#         169
+  C:0C06H         LINE#         170
+  C:0C0CH         LINE#         171
+  C:0C0FH         LINE#         172
+  C:0C16H         LINE#         175
+  C:0C16H         LINE#         180
+  C:0C25H         LINE#         181
+  C:0C33H         LINE#         182
+  -------         ENDPROC       UPDATE_BALL
+  -------         PROC          BOUNCE_BALL
+  C:0981H         LINE#         185
+  C:0981H         LINE#         188
+  C:09A1H         LINE#         189
+  C:09AFH         LINE#         190
+  C:09B8H         LINE#         191
+  C:09B8H         LINE#         193
+  C:09D8H         LINE#         194
+  C:09E6H         LINE#         195
+  C:09F4H         LINE#         196
+  C:09F4H         LINE#         197
+  C:09FAH         LINE#         199
+  C:0A01H         LINE#         200
+  C:0A1CH         LINE#         201
+  C:0A2FH         LINE#         203
+  C:0A38H         LINE#         204
+  C:0A53H         LINE#         205
+  C:0A65H         LINE#         206
+  -------         ENDPROC       BOUNCE_BALL
+  -------         PROC          _CHANGE_INCREMEMT
+  D:0007H         SYMBOL        change
+  C:11F8H         LINE#         208
+  C:11F8H         LINE#         209
+  C:11FAH         LINE#         210
+  C:1207H         LINE#         211
+  C:1215H         LINE#         212
+  -------         ENDPROC       _CHANGE_INCREMEMT
+  -------         PROC          ERROR_CHECKER
+  C:106AH         LINE#         214
+  C:106AH         LINE#         215
+  C:1083H         LINE#         216
+  C:109EH         LINE#         217
+  C:10ADH         LINE#         218
+  C:10BBH         LINE#         220
+  -------         ENDPROC       ERROR_CHECKER
+  -------         PROC          CLEAR_ARRAY
+  -------         DO            
+  D:0007H         SYMBOL        ar
+  D:0006H         SYMBOL        ac
+  -------         ENDDO         
+  C:110DH         LINE#         222
+  C:110DH         LINE#         224
+  C:1119H         LINE#         225
+  C:1125H         LINE#         226
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 13
+
+
+  C:113FH         LINE#         227
+  C:1142H         LINE#         228
+  C:1145H         LINE#         229
+  -------         ENDPROC       CLEAR_ARRAY
+  -------         PROC          ERROR_CRASH
+  C:0896H         LINE#         230
+  C:0896H         LINE#         232
+  C:089FH         LINE#         233
+  C:08BAH         LINE#         234
+  C:08D1H         LINE#         235
+  C:08D6H         LINE#         236
+  C:08D6H         LINE#         237
+  C:08D9H         LINE#         238
+  C:08DBH         LINE#         239
+  C:08DBH         LINE#         241
+  C:08E1H         LINE#         242
+  C:08E4H         LINE#         243
+  C:08F2H         LINE#         244
+  C:08F7H         LINE#         245
+  C:08FAH         LINE#         247
+  C:08FEH         LINE#         248
+  C:08FEH         LINE#         249
+  C:08FEH         LINE#         251
+  C:0901H         LINE#         253
+  C:0910H         LINE#         254
+  C:091FH         LINE#         255
+  C:092EH         LINE#         256
+  C:093DH         LINE#         258
+  C:094CH         LINE#         259
+  C:095BH         LINE#         260
+  C:0973H         LINE#         261
+  C:0978H         LINE#         262
+  C:097CH         LINE#         263
+  C:097CH         LINE#         264
+  C:097FH         LINE#         265
+  -------         ENDPROC       ERROR_CRASH
+  -------         PROC          _DRAW
+  D:0007H         SYMBOL        box
+  C:0787H         LINE#         267
+  C:0787H         LINE#         268
+  C:0796H         LINE#         269
+  C:07A5H         LINE#         270
+  C:07BEH         LINE#         271
+  C:07D7H         LINE#         272
+  C:07F0H         LINE#         273
+  C:0809H         LINE#         274
+  C:0822H         LINE#         275
+  C:083BH         LINE#         276
+  C:0854H         LINE#         277
+  C:086DH         LINE#         278
+  C:087AH         LINE#         279
+  C:0895H         LINE#         280
+  -------         ENDPROC       _DRAW
+  -------         PROC          XCLOCK_RESET
+  C:1146H         LINE#         284
+  C:1146H         LINE#         285
+  C:116BH         LINE#         286
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 14
+
+
+  C:117BH         LINE#         287
+  -------         ENDPROC       XCLOCK_RESET
+  -------         PROC          XCLOCK_INIT
+  C:127AH         LINE#         289
+  C:127AH         LINE#         290
+  C:127DH         LINE#         291
+  C:1280H         LINE#         292
+  C:1283H         LINE#         293
+  C:1285H         LINE#         295
+  C:1287H         LINE#         296
+  C:1289H         LINE#         297
+  -------         ENDPROC       XCLOCK_INIT
+  -------         PROC          XCLOCK_INTERUPT
+  C:0E6BH         LINE#         299
+  C:0E88H         LINE#         300
+  C:0E8BH         LINE#         301
+  C:0E8DH         LINE#         302
+  C:0E9BH         LINE#         305
+  C:0EB5H         LINE#         306
+  C:0EB8H         LINE#         307
+  C:0EBDH         LINE#         308
+  C:0EC0H         LINE#         309
+  C:0EC2H         LINE#         310
+  C:0EC8H         LINE#         311
+  C:0ECBH         LINE#         312
+  C:0ECBH         LINE#         313
+  C:0ECEH         LINE#         315
+  C:0ECEH         LINE#         320
+  -------         ENDPROC       XCLOCK_INTERUPT
+  -------         ENDMOD        PINGPONG68_V5
+
+  -------         MODULE        ?C?FPMUL
+  C:000EH         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:011EH         PUBLIC        ?C?FCASTC
+  C:0119H         PUBLIC        ?C?FCASTI
+  C:0114H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:0152H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        POW
+  D:0008H         PUBLIC        ?_pow?BYTE
+  C:0670H         PUBLIC        _pow
+  -------         ENDMOD        POW
+
+  -------         MODULE        ?C?CHKFLOAT
+  C:01D3H         PUBLIC        ?C?CHKFLOAT
+  -------         ENDMOD        ?C?CHKFLOAT
+
+  -------         MODULE        ?C?FPADD
+  C:01F4H         PUBLIC        ?C?FPADD
+  C:01F0H         PUBLIC        ?C?FPSUB
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 15
+
+
+  -------         ENDMOD        ?C?FPADD
+
+  -------         MODULE        ?C?FPCMP
+  C:02E7H         PUBLIC        ?C?FPCMP
+  C:02E5H         PUBLIC        ?C?FPCMP3
+  -------         ENDMOD        ?C?FPCMP
+
+  -------         MODULE        ?C?FPNEG
+  C:035EH         PUBLIC        ?C?FPNEG
+  -------         ENDMOD        ?C?FPNEG
+
+  -------         MODULE        EXP
+  C:0B3AH         PUBLIC        _EXP
+  -------         ENDMOD        EXP
+
+  -------         MODULE        LOG
+  C:056FH         PUBLIC        _LOG
+  C:056BH         PUBLIC        _LOG10
+  -------         ENDMOD        LOG
+
+  -------         MODULE        ?C?FPDIV
+  C:0372H         PUBLIC        ?C?FPDIV
+  -------         ENDMOD        ?C?FPDIV
+
+  -------         MODULE        ?C?SIDIV
+  C:045CH         PUBLIC        ?C?SIDIV
+  -------         ENDMOD        ?C?SIDIV
+
+  -------         MODULE        ?C?LNEG
+  C:0492H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?LLDCODE
+  C:04A0H         PUBLIC        ?C?LLDCODE
+  -------         ENDMOD        ?C?LLDCODE
+
+  -------         MODULE        ?C?LLDCODE0
+  C:04B0H         PUBLIC        ?C?LLDCODE0
+  -------         ENDMOD        ?C?LLDCODE0
+
+  -------         MODULE        ?C?CCASE
+  C:04C0H         PUBLIC        ?C?CCASE
+  -------         ENDMOD        ?C?CCASE
+
+  -------         MODULE        ?C?UIDIV
+  C:04E6H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?XBEEP?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_XSECONDS?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?XGETFULLKEY?PINGPONG68_V5
+
+BL51 BANKED LINKER/LOCATER V6.22.2.0                                                  08/12/2020  05:55:50  PAGE 16
+
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?XRESETKEY?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GET_BIN?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_COL?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_XROW?PINGPONG68_V5
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_INCREMEMT?PINGPONG68_V5
+
+Program Size: data=69.1 xdata=64 code=4790
+LINK/LOCATE RUN COMPLETE.  8 WARNING(S),  0 ERROR(S)
