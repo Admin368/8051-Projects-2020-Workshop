@@ -1,0 +1,338 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <paulobetaX5.c>
+*** WARNING C276 IN LINE 287 OF paulobetaX5.c: constant in condition expression
+   3          #define uchar unsigned char
+   4          uchar debug=0;// use for debugging keys [0=off/1=on]
+   5          //13 = minus
+   6          //14 = multiplication
+   7          //15 = division
+   8          //16 = addition
+   9          
+  10          // instead of
+  11          //13 = add
+  12          //14 = minus
+  13          //15 = multiply
+  14          //16 = divide
+  15          int a,b,c; // integers for calculation
+  16          int conv_int; //converted integer
+  17          char conv_char; //converted char
+  18          
+  19          uchar i,ixx;
+  20          uchar answer;
+  21          uchar selector=0; //1-3
+  22          uchar value1=0;// value used to calculate
+  23          uchar value2=0;// value used to calculate
+  24          sbit add=P3^4; // button to add
+  25          sbit subtract=P3^5; //button to subtract
+  26          sbit multiply=P3^6; //button to multiply
+  27          sbit divide=P3^7; // button to divide
+  28          
+  29          int isplit[2]; //split answer in int
+  30          uchar jsplit[2]; //array to keep split answer for diplaying on separate segments
+  31          uchar jj;// variable for forloop wen splitting
+  32          
+  33          uchar effector; //varible keeping action requested to do on values
+  34          
+  35          // declairing the functions
+  36          void debugx();
+  37          void ledsignal();
+  38          void showresult();
+  39          void calculate();
+  40          void geteffector();
+  41          void getinput();
+  42          void display();
+  43          int ConvertToInt(char charx);
+  44          char ConvertToChar(int intx);
+  45          
+  46          
+  47          
+  48          void main(){
+  49   1        if(debug==1){
+  50   2          xkey=0;
+  51   2          while(1){
+  52   3            debugx();
+  53   3          }
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 2   
+
+  54   2        }
+  55   1        else if(debug==0){
+  56   2          while(1){
+  57   3              xgetkey();
+  58   3              display();
+  59   3              ledsignal();
+  60   3              if(selector==3){calculate();}
+  61   3              if(selector==4){showresult();}
+  62   3            }
+  63   2        }
+  64   1      }
+  65          
+  66          void debugx(){
+  67   1         uchar colvalue,rowvalue;
+  68   1        P3 = 0xf0;//columnCheck //11110000
+  69   1        if(P3 != 0xf0){
+  70   2          xdelay(10);//verifying button press
+  71   2          while(P3!=0xf0){
+  72   3            P3 = 0xf0;
+  73   3            if(P3 != 0xf0){//columnCheck //11110000
+  74   4            colvalue=~0xf0|P3; //flips the 0to1 and vise vesa
+  75   4            P3 = 0x0f;//rowCheck //00001111
+  76   4            rowvalue = ~0x0f|P3;    // checking row
+  77   4            xprekey = colvalue&rowvalue;  
+  78   4              }
+  79   3            xtranslatekey(xprekey);
+  80   3            jsplit[0]= xkey/10;
+  81   3            jsplit[1]= xkey%10;
+  82   3            xsegment(3);
+  83   3            xdisplay(jsplit[0]);
+  84   3            xsegment(4);
+  85   3            xdisplay(jsplit[1]);
+  86   3          }
+  87   2        }
+  88   1            xtranslatekey(xprekey);
+  89   1            jsplit[0]= xkey/10;
+  90   1            jsplit[1]= xkey%10;
+  91   1            xsegment(3);
+  92   1            xdisplay(jsplit[0]);
+  93   1            xsegment(4);
+  94   1            xdisplay(jsplit[1]);
+  95   1      }
+  96          
+  97          void ledsignal(){
+  98   1      if(selector==1){xled(1);}
+  99   1      if(selector==2){xled(2);}
+ 100   1      if(selector==3){xled(3);}
+ 101   1      if(selector==4){xled(4);}
+ 102   1      if(effector==1){xled(5);}
+ 103   1      if(effector==2){xled(6);}
+ 104   1      if(effector==3){xled(7);}
+ 105   1      if(effector==4){xled(8);}
+ 106   1      }
+ 107          void getinput(){
+ 108   1        xresetkey();
+ 109   1        xgetfullkey();//give us variable xkey of what user is pressing
+ 110   1          
+ 111   1      }
+ 112          void display(){
+ 113   1        xsegment(1);
+ 114   1        xdisplay(value1);
+ 115   1        xsegment(6);
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 3   
+
+ 116   1        xdisplay(value2);
+ 117   1      }
+ 118          
+ 119          void xgetkey(){
+ 120   1        uchar colvalue,rowvalue;
+ 121   1        P3 = 0xf0;//columnCheck //11110000
+ 122   1        if(P3 != 0xf0){
+ 123   2          xdelay(10);//verifying button press
+ 124   2          while(P3!=0xf0){
+ 125   3            P3 = 0xf0;
+ 126   3            if(P3 != 0xf0){//columnCheck //11110000
+ 127   4            colvalue=~0xf0|P3; //flips the 0to1 and vise vesa
+ 128   4            P3 = 0x0f;//rowCheck //00001111
+ 129   4            rowvalue = ~0x0f|P3;    // checking row
+ 130   4            xprekey = colvalue&rowvalue;  
+ 131   4              }
+ 132   3            display();
+ 133   3            xtranslatekey(xprekey);
+ 134   3            if(selector==0){value1=xkey;}//geting value 1
+ 135   3            if(selector==1){//geting effector
+ 136   4              switch(xkey){
+ 137   5                case 12://debug
+ 138   5                  if(debug==1){debug=0;}
+ 139   5                  else if(debug==0){debug=1;}
+ 140   5                  break;
+ 141   5                case 13://add
+ 142   5                  effector=1;
+ 143   5                  break;
+ 144   5                case 14://subtract
+ 145   5                  effector=2;
+ 146   5                  break;
+ 147   5                case 15://multiply
+ 148   5                  effector=3;
+ 149   5                  break;
+ 150   5                case 16://divide
+ 151   5                  effector=4;
+ 152   5                  break;
+ 153   5                default:
+ 154   5                  effector=0;
+ 155   5                  selector=0;
+ 156   5                  return;
+ 157   5              }
+ 158   4            }
+ 159   3            if(selector==2){
+ 160   4              if(xkey>9){xkey=9;}
+ 161   4              value2=xkey;
+ 162   4            }//getting value 2
+ 163   3          }
+ 164   2          //if(selector==3){break;}
+ 165   2          selector++;
+ 166   2          if(selector>4){
+ 167   3          selector=0;
+ 168   3          value1=0;
+ 169   3          value2=0;
+ 170   3          answer=0;
+ 171   3          effector=0;
+ 172   3          }
+ 173   2          xresetkey();
+ 174   2          
+ 175   2        }   
+ 176   1      }
+ 177          
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 4   
+
+ 178          void calculate(){
+ 179   1      a = ConvertToInt(value1);
+ 180   1      b = ConvertToInt(value2); 
+ 181   1        switch(effector){
+ 182   2          case 1://addittion
+ 183   2            c=a+b;
+ 184   2            break;
+ 185   2          case 2: //subtraction
+ 186   2            c=a-b;
+ 187   2            break;
+ 188   2          case 3: //multiplication
+ 189   2            c=a*b;
+ 190   2            break;
+ 191   2          case 4://division
+ 192   2            c=a/b;
+ 193   2            break;
+ 194   2          default:
+ 195   2              c=0;
+ 196   2        }
+ 197   1      /*
+ 198   1      if(effector==0){c=a+b;}
+ 199   1      if(effector==1){c=a-b;}
+ 200   1      if(effector==2){c=a*b;}
+ 201   1      if(effector==3){c=a/b;}
+ 202   1      */
+ 203   1      
+ 204   1      isplit[0]= c/10;
+ 205   1      isplit[1]= c%10;
+ 206   1      
+ 207   1      //jsplit[0] = 7;
+ 208   1      //jsplit[1] = 7;
+ 209   1        
+ 210   1      //jsplit[0] = ConvertToChar(6);
+ 211   1      //jsplit[1] = ConvertToChar(6);
+ 212   1        
+ 213   1      jsplit[0] = ConvertToChar(isplit[0]);
+ 214   1      jsplit[1] = ConvertToChar(isplit[1]);
+ 215   1      selector = 4; //show result
+ 216   1      }
+ 217          
+ 218          void showresult(){
+ 219   1        while(selector==4){
+ 220   2          xgetkey();
+ 221   2          xsegment(3);
+ 222   2          xdisplay(jsplit[0]);
+ 223   2          xsegment(4);
+ 224   2          xdisplay(jsplit[1]);
+ 225   2        } 
+ 226   1      }
+ 227          
+ 228          
+ 229          int ConvertToInt(char charx){
+ 230   1        switch(charx){
+ 231   2          case 0:
+ 232   2            conv_int=0;
+ 233   2            break;
+ 234   2          case 1:
+ 235   2            conv_int=1;
+ 236   2            break;
+ 237   2          case 2:
+ 238   2            conv_int=2;
+ 239   2            break;
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 5   
+
+ 240   2          case 3:
+ 241   2            conv_int=3;
+ 242   2            break;
+ 243   2          case 4:
+ 244   2            conv_int=4;
+ 245   2            break;
+ 246   2          case 5:
+ 247   2            conv_int=5;
+ 248   2            break;
+ 249   2          case 6:
+ 250   2            conv_int=6;
+ 251   2            break;
+ 252   2          case 7:
+ 253   2            conv_int=7;
+ 254   2            break;
+ 255   2          case 8:
+ 256   2            conv_int=8;
+ 257   2            break;
+ 258   2          case 9:
+ 259   2            conv_int=9;
+ 260   2            break;
+ 261   2          default:
+ 262   2            conv_int=0; 
+ 263   2        }
+ 264   1      return conv_int;
+ 265   1      }
+ 266          
+ 267          char ConvertToChar(int intx){
+ 268   1        switch(intx){
+ 269   2          case 0:
+ 270   2            conv_char=0;
+ 271   2            break;
+ 272   2          case 1:
+ 273   2            conv_char=1;
+ 274   2            break;
+ 275   2          case 2:
+ 276   2            conv_char=2;
+ 277   2            break;
+ 278   2          case 3:
+ 279   2            conv_char=3;
+ 280   2            break;
+ 281   2          case 4:
+ 282   2            conv_char=4;
+ 283   2            break;
+ 284   2          case 5:
+ 285   2            conv_char=5;
+ 286   2            break;
+ 287   2          case 6:
+ 288   2            conv_char=6;
+ 289   2            break;
+ 290   2          case 7:
+ 291   2            conv_char=7;
+ 292   2            break;
+ 293   2          case 8:
+ 294   2            conv_char=8;
+ 295   2            break;
+ 296   2          case 9:
+ 297   2            conv_char=9;
+ 298   2            break;
+ 299   2          default:
+ 300   2            conv_char=0;  
+ 301   2        }
+C51 COMPILER V9.60.0.0   MAIN                                                              07/26/2020 22:55:35 PAGE 6   
+
+ 302   1      return conv_char;
+ 303   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1572    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     52       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
