@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Target 1",
+            "includePath": [
+                "C:\\Keil_v5\\C51\\INC",
+                "p:\\_GITHUB\\_MicroControllerWorkshop2020\\_WorkShopCode\\2020.07.24-PROJECT(PINGPONG68)\\PingPong68_V6(AI+)"
+            ],
+            "defines": [
+                "__C51__",
+                "__VSCODE_C51__",
+                "reentrant=",
+                "compact=",
+                "small=",
+                "large=",
+                "data=",
+                "idata=",
+                "pdata=",
+                "bdata=",
+                "xdata=",
+                "code=",
+                "bit=char",
+                "sbit=char",
+                "sfr=char",
+                "sfr16=int",
+                "sfr32=int",
+                "interrupt=",
+                "using=",
+                "_at_=",
+                "_priority_=",
+                "_task_="
+            ],
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}

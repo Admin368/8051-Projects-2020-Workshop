@@ -1,0 +1,13 @@
+C51 COMPILER V9.60.0.0   PINGPONG68_V5                                                     08/18/2020 04:13:15 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PINGPONG68_V5
+OBJECT MODULE PLACED IN .\Objects\pingpong68_v5.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE pingpong68_v5.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\pingpong68_v5.lst) TABS(2) OBJECT(.\Objects\pingpong68_v5.obj)
+
+line level    source
+
+*** ERROR C318 OF pingpong68_v5.c: can't open file 'pingpong68_v5.c'
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
