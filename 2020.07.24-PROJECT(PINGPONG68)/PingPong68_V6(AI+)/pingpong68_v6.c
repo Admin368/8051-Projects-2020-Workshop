@@ -380,8 +380,8 @@ void Xclock_interupt() interrupt 1 {
 	if(Xclock>=254){Xclock=0;}
 	//if(Xclock==(1*XgameSpeed)){//20 = 1 sec
 	//if(Xclock==20/XgameSpeed){//GameSpeed
-	//if( (Xclock%(21-XgameSpeed))==0){//GameSpeed
-	if(Xclock%(1)==0){
+	if( (Xclock%(3))==0){//GameSpeed
+	//if(Xclock%(1)==0){
 		xflag = ~xflag;
 		if(xflag==flag){
 			//P1=0xfe;
