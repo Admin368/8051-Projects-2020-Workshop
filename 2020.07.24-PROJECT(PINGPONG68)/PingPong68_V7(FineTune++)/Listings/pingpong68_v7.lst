@@ -1,0 +1,498 @@
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE PINGPONG68_V7
+OBJECT MODULE PLACED IN .\Objects\pingpong68_v7.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE pingpong68_v7.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\List
+                    -ings\pingpong68_v7.lst) TABS(2) OBJECT(.\Objects\pingpong68_v7.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include <paulobetaX5.h>
+   3          #include <paulo8x8_v1.h>
+   4          #define uchar unsigned char
+   5          
+   6          char p1_score=0; //player1 score
+   7          char p2_score=0; //player2 score
+   8          //MOVEMENT
+   9          char move_method=2;
+  10          char rand_char;
+  11          char rand_int;
+  12          //AI
+  13          char AI_MODE=1;
+  14          char cal_pos=0; // calculated possition
+  15          //keys
+  16          sbit key1=P3^4;
+  17          sbit key2=P3^5;
+  18          sbit key3=P3^6;
+  19          sbit key4=P3^7;
+  20          
+  21          //gamespeed
+  22          uchar autospeed;//whether or not to increase speed automatically
+  23          uchar highspeed;//higest speed you can go to
+  24          uchar Xclock = 0;
+  25          char Xclock_old;
+  26          uchar XgameSpeed=15;
+  27          char Xclock_divider;
+  28          char Xclock_Value1,Xclock_Value2;
+  29          
+  30          //implement score
+  31          char lock = 0; //locks the game in error mode until button press
+  32          uchar error=0; // if encounter error=1, if not =0;
+  33          uchar xx; // for forloops
+  34          //flags
+  35          uchar forward=1;
+  36          uchar flag = 1;
+  37          uchar xflag=1;
+  38          
+  39          uchar row2draw;// row to draw on
+  40          uchar col2draw;// column to draw on
+  41          
+  42          uchar increment=8;//value pushing ball
+  43          uchar ball_location=12;// ranges btween [B9 - B49 
+  44          uchar old_ball_location;
+  45          uchar bottomracket_location=3; // 6 locations [B1-B6]
+  46          uchar topracket_location=59; // 6 locations [B57-B62]
+  47          
+  48          void Xclock_setup();
+  49          void Xclock_reset();
+  50          void Xclock_init();
+  51          void psplit(uchar splitinput); // split input into 3 for display on 7seg
+  52          void updateassets();//updates ball+rackets
+  53          void update_ball(); //auto moves ball +/- 1row
+  54          void bounce_ball(); //bounces ball if hit any surface
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 2   
+
+  55          void update_bottomracket(); // gets input to move bottom racket
+  56          void update_topracket(); //get input to move top racket
+  57          void draw(uchar box); // function used to move elements between [B1-B64]
+  58          void clear_array();
+  59          void error_crash();
+  60          void error_checker();//avoid bricking my game
+  61          void change_incrememt(uchar change);
+  62          void getinput();//checks input from keyboard
+  63          
+  64          void show_score(){
+  65   1        char sx;
+  66   1        if(p1_score>4 || p2_score>4){p1_score=0;p2_score=0;}
+  67   1        for(sx=0;sx<=p1_score;sx++){
+  68   2          xled(sx); //show player1 score
+  69   2        }
+  70   1        for(sx=8;sx>=9-p2_score;sx--){
+  71   2          xled(sx);//show player2 score
+  72   2        }
+  73   1      }
+  74          void reset(){
+  75   1        ball_location=12;
+  76   1        increment=8;
+  77   1        forward=1;
+  78   1        bottomracket_location=3;
+  79   1        topracket_location=59;
+  80   1        XgameSpeed=17;
+  81   1        error=0;
+  82   1        lock=0;
+  83   1      }
+  84          
+  85          void check_reset(){
+  86   1        if(key1==0){reset();}
+  87   1        else if(key2==0){reset();}
+  88   1        else if(key3==0){reset();}
+  89   1        else if(key4==0){reset();}
+  90   1        //main();
+  91   1      }
+  92          
+  93          char random_num(){//generates random number to create variation for ai moves
+  94   1        rand_int=rand()%3;
+*** WARNING C206 IN LINE 94 OF pingpong68_v7.c: 'rand': missing function-prototype
+  95   1        switch(rand_int){
+  96   2          case 0:
+  97   2            rand_char = 0;
+  98   2            break;
+  99   2          case 1:
+ 100   2            rand_char = 1;
+ 101   2            break;
+ 102   2          case 2:
+ 103   2            rand_char =2;
+ 104   2            break;
+ 105   2        }
+ 106   1        return rand_char;
+ 107   1      }
+ 108          void AI_Move(){
+ 109   1        if(ball_location>8&&ball_location<57){
+ 110   2          cal_pos=ball_location%8;
+ 111   2          if(cal_pos==0){cal_pos=8;}
+ 112   2          cal_pos=cal_pos-2;
+ 113   2          switch(move_method){
+ 114   3            case 1://1ST_MOVE_METHOD
+ 115   3              topracket_location=57+cal_pos;
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 3   
+
+ 116   3              if(topracket_location>64){topracket_location=64;}
+ 117   3              else if(topracket_location<55){topracket_location=55;}
+ 118   3              break;
+ 119   3            case 2://2ND_MOVE_METHOD
+ 120   3              //cal_pos=cal_pos+2;
+ 121   3              cal_pos=cal_pos+random_num();
+ 122   3              if(cal_pos<(topracket_location-56)){topracket_location--;}
+ 123   3              else if(cal_pos>(topracket_location-56)){topracket_location++;}
+ 124   3              if(topracket_location>64){topracket_location=64;}
+ 125   3              else if(topracket_location<55){topracket_location=55;}
+ 126   3              break;
+ 127   3            //default:
+ 128   3          }
+ 129   2        }
+ 130   1      }
+ 131          void AI_Calculate(){
+ 132   1        old_ball_location=ball_location;
+ 133   1        //BOUNCING ON RIGHT_WALL
+ 134   1        if(ball_location==16||ball_location==24||ball_location==32||ball_location==40||ball_location==48||ball_lo
+             -cation==56){
+ 135   2          if(forward==1){increment=7;ball_location=ball_location+increment;return;}
+ 136   2          else if(forward==0){increment=-9;ball_location=ball_location+increment;return;}
+ 137   2        }
+ 138   1        //BOUNCING ON LEFT_WALL
+ 139   1        else if(ball_location==9||ball_location==17||ball_location==25||ball_location==33||ball_location==41||bal
+             -l_location==49){
+ 140   2          if(forward==1){increment=9;ball_location=ball_location+increment;return;}
+ 141   2          else if(forward==0){increment=-7;ball_location=ball_location+increment;return;}
+ 142   2        }
+ 143   1        ball_location=ball_location+increment;
+ 144   1        //BOUNCING ON BOTTOM_RACKET
+ 145   1        if(ball_location==(bottomracket_location)){increment=-9;return;}
+ 146   1        else if(ball_location==(bottomracket_location+1)){increment=-8;return;}
+ 147   1        else if(ball_location==(bottomracket_location+2)){increment=-7;return;}
+ 148   1        //BOUNCING ON TOP_RACKET
+ 149   1        else if(ball_location==(topracket_location)){increment=7;return;}
+ 150   1        else if(ball_location==(topracket_location+1)){increment=8;return;}
+ 151   1        else if(ball_location==(topracket_location+2)){increment=9;return;}
+ 152   1      
+ 153   1          //BOUNCING ON RIGHT_WALL
+ 154   1        if(ball_location==16||ball_location==24||ball_location==32||ball_location==40||ball_location==48||ball_lo
+             -cation==56){
+ 155   2          if(forward==1){increment=7;ball_location=ball_location+increment;return;}
+ 156   2          else if(forward==0){increment=-9;ball_location=ball_location+increment;return;}
+ 157   2        }
+ 158   1        //BOUNCING ON LEFT_WALL
+ 159   1        else if(ball_location==9||ball_location==17||ball_location==25||ball_location==33||ball_location==41||bal
+             -l_location==49){
+ 160   2          if(forward==1){increment=9;ball_location=ball_location+increment;return;}
+ 161   2          else if(forward==0){increment=-7;ball_location=ball_location+increment;return;}
+ 162   2        }
+ 163   1        ball_location=ball_location+increment;
+ 164   1        //BOUNCING ON BOTTOM_RACKET
+ 165   1        if(ball_location==(bottomracket_location)){increment=-9;return;}
+ 166   1        else if(ball_location==(bottomracket_location+1)){increment=-8;return;}
+ 167   1        else if(ball_location==(bottomracket_location+2)){increment=-7;return;}
+ 168   1        //BOUNCING ON TOP_RACKET
+ 169   1        else if(ball_location==(topracket_location)){increment=7;return;}
+ 170   1        else if(ball_location==(topracket_location+1)){increment=8;return;}
+ 171   1        else if(ball_location==(topracket_location+2)){increment=9;return;}
+ 172   1      }
+ 173          
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 4   
+
+ 174          void Xclock_setup(){
+ 175   1      XgameSpeed=13;
+ 176   1      autospeed=1;
+ 177   1      highspeed=20;
+ 178   1      Xclock_divider=256;
+ 179   1      Xclock_Value1=65536;
+ 180   1      Xclock_Value2=46082;
+ 181   1      }
+ 182          
+ 183          void getinput(){
+ 184   1          if(key1==0){//bottom racket push_left
+ 185   2            bottomracket_location--;
+ 186   2            if(bottomracket_location<=0){bottomracket_location=0;}
+ 187   2            else if(bottomracket_location>=8){bottomracket_location=8;}
+ 188   2          }
+ 189   1          else if(key2==0){//bottom racket push_right
+ 190   2            bottomracket_location++;
+ 191   2            if(bottomracket_location<=0){bottomracket_location=0;}
+ 192   2            else if(bottomracket_location>=8){bottomracket_location=8;}
+ 193   2          } 
+ 194   1          else if(key3==0){//top racket push_left
+ 195   2            if(AI_MODE==0){ 
+ 196   3              topracket_location--;
+ 197   3              if(topracket_location<=55){topracket_location=55;}
+ 198   3              else if(topracket_location>=64){topracket_location=64;}
+ 199   3            }
+ 200   2          }
+ 201   1          else if(key4==0){//top racket push_right
+ 202   2            if(AI_MODE==0){ 
+ 203   3              topracket_location++;
+ 204   3              if(topracket_location<=55){topracket_location=55;}
+ 205   3              else if(topracket_location>=64){topracket_location=64;}
+ 206   3            }
+ 207   2          }
+ 208   1          while(key1==0||key2==0||key3==0||key4==0){
+ 209   2            clear_array();
+ 210   2            updateassets();
+ 211   2            disp_col();
+ 212   2          }
+ 213   1      }
+ 214          
+ 215          void check_score(){
+ 216   1      // CHECKING IF WIN OR LOST
+ 217   1        if(ball_location<=8){error=10;error_crash();}//lost
+ 218   1        else if(ball_location>=64){error=20;error_crash();}//won
+ 219   1      }
+ 220          
+ 221          void main(){
+ 222   1        Xclock_init();// initiates SysClock+interupt [GameClock]
+ 223   1        while(error==0){
+ 224   2          getinput();
+ 225   2          clear_array();
+ 226   2          updateassets();
+ 227   2          //draw(ball_location);
+ 228   2          disp_col();
+ 229   2          show_score();
+ 230   2          error_checker();
+ 231   2        }
+ 232   1        error_crash();
+ 233   1      }
+ 234          
+ 235          void update_bottomracket(){
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 5   
+
+ 236   1        uchar limit=3;
+ 237   1        switch(bottomracket_location){
+ 238   2          case -1://racket out of  bound on left
+ 239   2            draw(1);
+ 240   2            break;
+ 241   2          case 0://racket out of  bound on left
+ 242   2            draw(1);draw(2);
+ 243   2            break;
+ 244   2          case 7://racket out of  bound on right
+ 245   2            draw(7);draw(8);
+ 246   2            break;
+ 247   2          case 8://racket out of  bound on right
+ 248   2            draw(8);
+ 249   2            break;
+ 250   2          default:
+ 251   2            for(xx=0;xx<3;xx++){
+ 252   3              draw((bottomracket_location)+xx);
+ 253   3            }
+ 254   2        }
+ 255   1      }
+ 256          
+ 257          void update_topracket(){
+ 258   1        switch(topracket_location){
+ 259   2          case 55:
+ 260   2            draw(57);
+ 261   2            break;
+ 262   2          case 56:
+ 263   2            draw(57);draw(58);
+ 264   2            break;
+ 265   2          case 63:
+ 266   2            draw(63);draw(64);
+ 267   2            break;
+ 268   2          case 64:
+ 269   2            draw(64);
+ 270   2            break;
+ 271   2          default:
+ 272   2            for(xx=0;xx<3;xx++){
+ 273   3              draw((topracket_location)+xx);
+ 274   3            }
+ 275   2        }
+ 276   1      } 
+ 277          
+ 278          void updateassets(){//updates ball and all rackats on screen
+ 279   1        update_bottomracket(); //print bottomracket
+ 280   1        draw(ball_location);//prints ball in array
+ 281   1        update_topracket();//print top racket
+ 282   1      }
+ 283          
+ 284          void update_ball(){
+ 285   1        // SAVING PREV BOUNCE LOCATION
+ 286   1        old_ball_location=ball_location;
+ 287   1        // BOUNCING BALL
+ 288   1        bounce_ball();
+ 289   1        // BOTTOM RACKET
+ 290   1        if(ball_location==(bottomracket_location)||ball_location==(bottomracket_location+1)||ball_location==(bott
+             -omracket_location+2)){
+ 291   2          ball_location=old_ball_location;
+ 292   2          increment=-(increment);//REVERSE BALL DIRECTION
+ 293   2          forward=1;//FLAG FOR BALL DIRECTION GOING FORWARD
+ 294   2          ball_location=ball_location+increment;
+ 295   2          //AI_Calculate();
+ 296   2          //check_score();
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 6   
+
+ 297   2          return;
+ 298   2          //break;
+ 299   2        }
+ 300   1        // TOP RACKET
+ 301   1        else if(ball_location==(topracket_location)||ball_location==(topracket_location+1)||ball_location==(topra
+             -cket_location+2)){
+ 302   2          ball_location=old_ball_location;
+ 303   2          increment= -(increment);//REVERSE BALL DIRECTION
+ 304   2          forward=0;//FLAG FOR BALL DIRECTION GOING BACKWARDS
+ 305   2          ball_location=ball_location+increment;
+ 306   2          return;
+ 307   2        }
+ 308   1      }
+ 309          
+ 310          void bounce_ball(){
+ 311   1        //BOUNCING ON RIGHT_WALL
+ 312   1        if(ball_location==16||ball_location==24||ball_location==32||ball_location==40||ball_location==48||ball_lo
+             -cation==56){
+ 313   2          if(forward==1){increment=7;ball_location=ball_location+increment;return;}
+ 314   2          else if(forward==0){increment=-9;ball_location=ball_location+increment;return;}
+ 315   2        }
+ 316   1        //BOUNCING ON LEFT_WALL
+ 317   1        else if(ball_location==9||ball_location==17||ball_location==25||ball_location==33||ball_location==41||bal
+             -l_location==49){
+ 318   2          if(forward==1){increment=9;ball_location=ball_location+increment;return;}
+ 319   2          else if(forward==0){increment=-7;ball_location=ball_location+increment;return;}
+ 320   2        }
+ 321   1        ball_location=ball_location+increment;
+ 322   1        //BOUNCING ON BOTTOM_RACKET
+ 323   1        if(ball_location==(bottomracket_location)){increment=-9;}
+ 324   1        else if(ball_location==(bottomracket_location+1)){increment=-8;}
+ 325   1        else if(ball_location==(bottomracket_location+2)){increment=-7;}
+ 326   1        //BOUNCING ON TOP_RACKET
+ 327   1        else if(ball_location==(topracket_location)){increment=7;if(xflag==flag){XgameSpeed++;}}
+ 328   1        else if(ball_location==(topracket_location+1)){increment=8;if(xflag==flag){XgameSpeed++;}}
+ 329   1        else if(ball_location==(topracket_location+2)){increment=9;if(xflag==flag){XgameSpeed++;}}
+ 330   1        if(XgameSpeed>=20){XgameSpeed=20;}
+ 331   1        return;
+ 332   1      }
+ 333          
+ 334          void change_incrememt(uchar change){
+ 335   1        increment=change;
+ 336   1        if(increment<=0){increment=1;}
+ 337   1        if(increment>9){increment=9;}
+ 338   1      }
+ 339          
+ 340          void error_checker(){
+ 341   1        if(increment<=0&&increment>8){error=2;return;}//Error2 increment out of bound
+ 342   1      }
+ 343          
+ 344          void clear_array(){
+ 345   1        uchar ar,ac;
+ 346   1        for(ar=0;ar<8;ar++){
+ 347   2          for(ac=0;ac<8;ac++){
+ 348   3            map[ar][ac]=0;
+ 349   3          }
+ 350   2        }
+ 351   1      }
+ 352          void error_crash(){
+ 353   1        switch(error){
+ 354   2          case 10://lost game
+ 355   2            clear_array();
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 7   
+
+ 356   2            for(xx=3;xx<=59;xx+=8){draw(xx);}
+ 357   2            for(xx=4;xx<=8;xx+=1){draw(xx);}
+ 358   2            xled(11);
+ 359   2            p2_score++;
+ 360   2            lock=1;
+ 361   2            while(lock==1){
+ 362   3              disp_col();
+ 363   3              check_reset();
+ 364   3            }
+ 365   2            return;
+ 366   2            break;  
+ 367   2          case 20://won game
+ 368   2            p1_score++; 
+ 369   2            lock=1;
+ 370   2            while(lock==1){
+ 371   3              clear_array();
+ 372   3              for( xx=1;xx<=64;xx++){
+ 373   4                draw(xx);
+ 374   4                disp_col();
+ 375   4                check_reset();
+ 376   4                //xdelay(1);
+ 377   4              }
+ 378   3            }
+ 379   2            return;
+ 380   2            break;
+ 381   2          default://general Error
+ 382   2            //error
+ 383   2            clear_array();
+ 384   2            //draw 'e'
+ 385   2            draw(36);draw(35);draw(34);
+ 386   2            draw(28);draw(26);draw(20);
+ 387   2            draw(19);draw(18);draw(10);
+ 388   2            draw(4);draw(3);draw(2);
+ 389   2            //draw 'r'
+ 390   2            draw(32);draw(31);draw(30);
+ 391   2            draw(22);draw(14);draw(6);
+ 392   2            for(xx=56;xx<(56+error);xx++){
+ 393   3              draw(xx);
+ 394   3            }
+ 395   2            lock=1;
+ 396   2            while(lock==1){
+ 397   3              disp_col();
+ 398   3              check_reset();
+ 399   3            }
+ 400   2        }
+ 401   1      }
+ 402          void draw(uchar box){
+ 403   1      if(box<1){error=4;return;}
+ 404   1      if(box>64){error=4;return;}
+ 405   1      if(box>0&&box<=8){col2draw=1;}
+ 406   1      if(box>8&&box<=16){col2draw=2;}
+ 407   1      if(box>16&&box<=24){col2draw=3;}
+ 408   1      if(box>24&&box<=32){col2draw=4;}
+ 409   1      if(box>32&&box<=40){col2draw=5;}
+ 410   1      if(box>40&&box<=48){col2draw=6;}
+ 411   1      if(box>48&&box<=56){col2draw=7;}
+ 412   1      if(box>56&&box<=64){col2draw=8;}
+ 413   1        row2draw=box-(8*(col2draw-1));
+ 414   1        map[row2draw-1][col2draw-1]=1;
+ 415   1      }
+ 416          
+ 417          void Xclock_reset(){
+C51 COMPILER V9.60.0.0   PINGPONG68_V7                                                     08/25/2020 06:38:09 PAGE 8   
+
+ 418   1        TH0=(Xclock_Value1-Xclock_Value2)/Xclock_divider;
+ 419   1        TL0=(Xclock_Value1-Xclock_Value2)%Xclock_divider;
+ 420   1      }
+ 421          
+ 422          void Xclock_init(){
+ 423   1        Xclock_setup();
+ 424   1        TMOD = 0x01; //TIMER MODE1
+ 425   1        Xclock_reset();//RESETS TIMER
+ 426   1        TR0 = 1; //STARTS TIMER
+ 427   1        //ENABLE INTERUPT
+ 428   1        EA = 1; //CPU INTERUPT ENABLE
+ 429   1        ET0 = 1; //ENABLE TIMER 0
+ 430   1      }
+ 431          
+ 432          void Xclock_interupt() interrupt 1 {
+ 433   1        Xclock_reset(); //RESET CLOCK
+ 434   1        Xclock++; // increament count
+ 435   1        if(Xclock>=254){Xclock=0;}
+ 436   1        if(Xclock==(21-XgameSpeed)){ //6 is okay speed
+ 437   2          xflag = ~xflag;
+ 438   2          if(xflag==flag){
+ 439   3            //P1=0xfe;
+ 440   3          }
+ 441   2          else if(xflag!=flag){
+ 442   3            P1=0xff;
+ 443   3          }
+ 444   2          if(AI_MODE==1){AI_Move();}
+ 445   2          //ball_location=bottomracket_location+9;
+ 446   2          update_ball();
+ 447   2          check_score();
+ 448   2          Xclock=0;
+ 449   2          //disp_col();
+ 450   2        }
+ 451   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3393    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     64    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     51       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
