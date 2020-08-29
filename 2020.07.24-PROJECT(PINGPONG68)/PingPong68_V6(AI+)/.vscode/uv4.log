@@ -1,5 +1,6 @@
 Build target 'Target 1'
 compiling pingpong68_v6.c...
+pingpong68_v6.c(64): warning C206: 'rand': missing function-prototype
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?XBEEP?PINGPONG68_V6
@@ -23,12 +24,15 @@ linking...
     SEGMENT: ?PR?_XROW?PINGPONG68_V6
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?RANDOM_NUM?PINGPONG68_V6
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?AI_CALCULATE?PINGPONG68_V6
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_CHANGE_INCREMEMT?PINGPONG68_V6
 
-Program Size: data=71.1 xdata=64 code=5357
+Program Size: data=78.1 xdata=64 code=5563
 creating hex file from ".\Objects\PingPong68_v4"...
-".\Objects\PingPong68_v4" - 0 Error(s), 9 Warning(s).
+".\Objects\PingPong68_v4" - 0 Error(s), 11 Warning(s).
 Build Time Elapsed:  00:00:01

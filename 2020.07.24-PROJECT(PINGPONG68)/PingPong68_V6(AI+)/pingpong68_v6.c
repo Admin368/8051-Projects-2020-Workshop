@@ -5,7 +5,10 @@
 #include <paulo8x8_v1.h>
 //#include <gametimerX1.h>
 #define uchar unsigned char
-
+//MOVEMENT
+char move_method=2;
+char rand_char;
+char rand_int;
 //AI
 char AI_MODE=1;
 char cal_pos=0; // calculated possition
@@ -20,12 +23,11 @@ uchar autospeed;//whether or not to increase speed automatically
 uchar highspeed;//higest speed you can go to
 uchar Xclock = 0;
 char Xclock_old;
-uchar XgameSpeed=1;
+uchar XgameSpeed=15;
 char Xclock_divider;
 char Xclock_Value1,Xclock_Value2;
 
 //implement score
-//
 uchar error=0; // if encounter error=1, if not =0;
 uchar xx; // for forloops
 //flags
@@ -58,14 +60,30 @@ void error_checker();//avoid bricking my game
 void change_incrememt(uchar change);
 void getinput();//checks input from keyboard
 
+char random_num(){
+	rand_int=rand()%3;
+	return rand_char;
+}
 void AI_Move(){
 	if(ball_location>8&&ball_location<57){
 		cal_pos=ball_location%8;
 		if(cal_pos==0){cal_pos=8;}
 		cal_pos=cal_pos-2;
-		topracket_location=57+cal_pos;
-		if(topracket_location>64){topracket_location=64;}
-		else if(topracket_location<55){topracket_location=55;}
+		switch(move_method){
+			case 1://1ST_MOVE_METHOD
+				topracket_location=57+cal_pos;
+				if(topracket_location>64){topracket_location=64;}
+				else if(topracket_location<55){topracket_location=55;}
+				break;
+			case 2://2ND_MOVE_METHOD
+				cal_pos=cal_pos+2;
+				if(cal_pos<(topracket_location-56)){topracket_location--;}
+				else if(cal_pos>(topracket_location-56)){topracket_location++;}
+				if(topracket_location>64){topracket_location=64;}
+				else if(topracket_location<55){topracket_location=55;}
+				break;
+			//default:
+		}
 	}
 }
 void AI_Calculate(){
@@ -159,6 +177,13 @@ void getinput(){
 		}
 	//}
 }
+
+void check_score(){
+// CHECKING IF WIN OR LOST
+	if(ball_location<=8){error=10;error_crash();}//lost
+	else if(ball_location>=64){error=20;error_crash();}//won
+}
+
 void main(){
 	Xclock_init();// initiates SysClock+interupt [GameClock]
 	while(error==0){
@@ -238,6 +263,7 @@ void update_ball(){
 		forward=1;//FLAG FOR BALL DIRECTION GOING FORWARD
 		ball_location=ball_location+increment;
 		//AI_Calculate();
+		//check_score();
 		return;
 		//break;
 	}
@@ -247,18 +273,13 @@ void update_ball(){
 		increment= -(increment);//REVERSE BALL DIRECTION
 		forward=0;//FLAG FOR BALL DIRECTION GOING BACKWARDS
 		ball_location=ball_location+increment;
-
+		//check_score();
 		return;
 		//break;
 	}
 	//ball_location=ball_location+increment;
-		
-
-	// CHECKING IF WIN OR LOST
-	if(ball_location<1){error=10;return;}//lost
-	else if(ball_location>64){error=20;return;}//won
+	//check_score();
 }
-
 
 void bounce_ball(){
 
@@ -273,6 +294,7 @@ void bounce_ball(){
 		else if(forward==0){increment=-7;ball_location=ball_location+increment;return;}
 	}
 	ball_location=ball_location+increment;
+	/*
 	//BOUNCING ON BOTTOM_RACKET
 	if(ball_location==(bottomracket_location)){increment=-9;return;}
 	else if(ball_location==(bottomracket_location+1)){increment=-8;return;}
@@ -281,6 +303,17 @@ void bounce_ball(){
 	else if(ball_location==(topracket_location)){increment=7;return;}
 	else if(ball_location==(topracket_location+1)){increment=8;return;}
 	else if(ball_location==(topracket_location+2)){increment=9;return;}
+	*/
+	//BOUNCING ON BOTTOM_RACKET
+	if(ball_location==(bottomracket_location)){increment=-9;}
+	else if(ball_location==(bottomracket_location+1)){increment=-8;}
+	else if(ball_location==(bottomracket_location+2)){increment=-7;}
+	//BOUNCING ON TOP_RACKET
+	else if(ball_location==(topracket_location)){increment=7;if(xflag==flag){XgameSpeed++;}}
+	else if(ball_location==(topracket_location+1)){increment=8;if(xflag==flag){XgameSpeed++;}}
+	else if(ball_location==(topracket_location+2)){increment=9;if(xflag==flag){XgameSpeed++;}}
+	if(XgameSpeed>=20){XgameSpeed=20;}
+	return;
 }
 
 void change_incrememt(uchar change){
@@ -292,8 +325,8 @@ void change_incrememt(uchar change){
 void error_checker(){
 	if(increment<=0&&increment>8){error=2;return;}//Error2 increment out of bound
 	//if(ball_location<9&&ball_location>56){error=3;return;}//Error3 ball out of bound
-	if(ball_location<1){error=10;return;}//lost
-	if(ball_location>64){error=20;return;}//won
+	//if(ball_location<1){error=10;return;}//lost
+	//else if(ball_location>64){error=20;return;}//won
 
 }
 
@@ -306,41 +339,46 @@ void clear_array(){
 	}
 }
 void error_crash(){
-	//lost game
-	if(error==10){clear_array();
-		for(xx=3;xx<=59;xx+=8){draw(xx);}
-		for(xx=4;xx<=8;xx+=1){draw(xx);}
-		xled(11);
-		while(1){
-			disp_col();
-		}
-	}
-	//won game
-	if(error==20){while(1){
-		clear_array();
-		for(xx=1;xx<=64;xx++){
-			draw(xx);
-			disp_col();
-			//xdelay(1);
+	switch(error){
+		case 10://lost game
+			clear_array();
+			for(xx=3;xx<=59;xx+=8){draw(xx);}
+			for(xx=4;xx<=8;xx+=1){draw(xx);}
+			xled(11);
+			while(1){
+				disp_col();
 			}
-		}
+			break;	
+		case 20://won game
+			while(1){
+				clear_array();
+				for(xx=1;xx<=64;xx++){
+					draw(xx);
+					disp_col();
+					//xdelay(1);
+				}
+			}
+			break;
+		default://general Error
+			//error
+			clear_array();
+			//draw 'e'
+			draw(36);draw(35);draw(34);
+			draw(28);draw(26);draw(20);
+			draw(19);draw(18);draw(10);
+			draw(4);draw(3);draw(2);
+			//draw 'r'
+			draw(32);draw(31);draw(30);
+			draw(22);draw(14);draw(6);
+			for(xx=56;xx<(56+error);xx++){
+				draw(xx);
+			}
+			while(1){
+				disp_col();
+			}
 	}
-	//error
-	clear_array();
-	//draw 'e'
-	draw(36);draw(35);draw(34);
-	draw(28);draw(26);draw(20);
-	draw(19);draw(18);draw(10);
-	draw(4);draw(3);draw(2);
-	//draw 'r'
-	draw(32);draw(31);draw(30);
-	draw(22);draw(14);draw(6);
-	for(xx=56;xx<(56+error);xx++){
-		draw(xx);
-	}
-	while(1){
-		disp_col();
-	}
+	
+	
 }
 void draw(uchar box){
 if(box<1){error=4;return;}
@@ -380,7 +418,8 @@ void Xclock_interupt() interrupt 1 {
 	if(Xclock>=254){Xclock=0;}
 	//if(Xclock==(1*XgameSpeed)){//20 = 1 sec
 	//if(Xclock==20/XgameSpeed){//GameSpeed
-	if( (Xclock%(3))==0){//GameSpeed
+	if(Xclock==(21-XgameSpeed)){ //6 is okay speed
+	//if( (Xclock%(3))==0){//GameSpeed
 	//if(Xclock%(1)==0){
 		xflag = ~xflag;
 		if(xflag==flag){
@@ -392,6 +431,8 @@ void Xclock_interupt() interrupt 1 {
 		if(AI_MODE==1){AI_Move();}
 		//ball_location=bottomracket_location+9;
 		update_ball();
+		check_score();
+		Xclock=0;
 		//disp_col();
 	}
 	//GAME IF STATEMENTS
